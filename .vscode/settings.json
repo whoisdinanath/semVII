@@ -1,0 +1,75 @@
+{
+    "latex-workshop.synctex.afterBuild.enabled": true,
+    "latex-workshop.view.pdf.viewer": "tab",
+    "explorer.confirmDelete": false,
+    "files.autoSave": "afterDelay",
+    "latex-workshop.latex.recipes": [
+        {
+            "name": "latexmk (pdf)",
+            "tools": ["latexmk"]
+        },
+        {
+            "name": "pdflatex",
+            "tools": ["pdflatex", "bibtex", "pdflatex", "pdflatex"]
+        },
+        {
+            "name": "fast_pdflatex",
+            "tools": ["pdflatex"]
+        }
+    ],
+    "latex-workshop.latex.tools": [
+        {
+            "name": "latexmk",
+            "command": "latexmk",
+            "args": [
+                "-synctex=1",
+                "-interaction=nonstopmode", // Suppress most warnings during the process
+                "-file-line-error",
+                "-pdf",
+                "-outdir=%DIR%/build/", // Store auxiliary files here
+                "%DOC%"                  // Compile the document
+            ]
+        },
+        {
+            "name": "pdflatex",
+            "command": "pdflatex",
+            "args": [
+                "-synctex=1",
+                "-interaction=nonstopmode",  // Suppress most warnings during the process
+                "-file-line-error",
+                "-output-directory=%DIR%/build", // Output directory for auxiliary files
+                "%DOC%"                          // Compile the document
+            ]
+        },
+        {
+            "name": "bibtex",
+            "command": "bibtex",
+            "args": [
+                "%DOCFILE%" // Run BibTeX on the main document file
+            ]
+        }
+    ],
+    // "latex-workshop.latex.autoClean.run": "onBuilt",  // Automatically clean auxiliary files after build
+    "latex-workshop.latex.recipe.default": "fast_pdflatex", // Default recipe to use
+    "latex-workshop.linting.run": "onType",           // Lint as you type
+    "latex-workshop.latex.outDir": "%DIR%/build",     // Output directory for PDFs (final PDF goes here)
+    "security.workspace.trust.untrustedFiles": "ask", // Prompt before opening untrusted files
+    "workbench.sideBar.location": "right",            // Move the sidebar to the right
+    "editor.mouseWheelZoom": true,                    // Enable mouse wheel zoom in the editor
+    "editor.fontFamily": "Cascadia Code", // Use JetBrains Mono font
+    "editor.fontLigatures": "'ss01'",                 // Enable font ligatures for a cleaner code
+    "markdown.preview.typographer": true,             // Enable typographer for Markdown preview
+    "debug.onTaskErrors": "debugAnyway",              // Debug even when there are task errors
+    "editor.wordWrap": "on",                          // Enable word wrapping in the editor
+
+    // Error and warning filtering
+
+    // Hiding files and folders that are unnecessary or clutter
+    "files.exclude": {
+        "**/build/*": true, // Hide all files inside the `build/temp` folder (even if created by LaTeX)
+        "**/*.aux": true,  // Hide any .aux files across the project
+        "**/*.log": true,  // Hide any .log files
+        "**/*.toc": true,  // Hide any .toc files
+        "**/*.out": true   // Hide any .out files
+    }
+}
