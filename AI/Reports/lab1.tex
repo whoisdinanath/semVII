@@ -10,6 +10,9 @@
 \usepackage{listings}
 \usepackage{xcolor}
 \usepackage{booktabs}
+\usepackage{tikz}
+\usepackage{times}
+\usepackage{newtxmath}
 
 
 \definecolor{codegreen}{rgb}{0,0.6,0}
@@ -52,9 +55,8 @@ Thapathali Campus, IOE, Tribhuvan University, Nepal\\
 This report presents a comprehensive exploration of the Perceptron Learning Algorithm applied to fundamental logic functions, including AND, OR, and NOT gates, and examines its inherent limitation with the XOR operation. Beginning with a detailed theoretical background, we introduce the various activation functions and perceptron model. The Heaviside activation function, followed by the learning rule that iteratively adjusts weights and bias based on prediction errors. We also explore about sigmod activation function. We implemented it in Python using NumPy, the algorithm was trained on truth-table datasets, achieving rapid convergence for linearly separable functions. Quantitative results are provided, including final weight vectors, biases, epoch counts, and visualized decision boundaries. In contrast, the XOR gate training process fails to converge, underscoring the necessity of non-linear architectures for non-linearly separable problems. We supplement the previous experimental findings of XOR inseparability and reference historical work by Minsky and Papert. Concluding remarks highlight the perceptron utility for simple classification tasks and its limitations, motivating the progression to multi-layer networks and non-linear activation functions for complex problem domains.
 
 \end{abstract}
-
 \begin{IEEEkeywords}
-    Perceptron, Logic Gates, XOR Problem, Activation Function, Linear Separability, Neural Networks
+    Activation Function, Linear Separability, Logic Gates, Neural Networks, Perceptron, XOR Problem
 \end{IEEEkeywords}
 
 \section{Introduction}
@@ -100,15 +102,61 @@ An activation function is a mathematical function that determines the output of 
 
 \subsection*{Unit Step Function}
 The unit step function is a simple activation function that outputs 1 if the input is greater than or equal to a certain threshold, and 0 otherwise. It is defined as:
+
+\begin{figure}[h]
+    \centering
+    \begin{tikzpicture}[axis/.style={very thick, ->, >=stealth}]
+  % Draw axes
+  \draw[axis] (-2,0) -- (3,0) node[right] {$x$};
+  \draw[axis] (0,-0.5) -- (0,1.5) node[above] {$u(x)$};
+
+  % Draw the unit step function
+  \draw[thick, blue] (-2,0) -- (0,0);
+  \draw[fill=white] (0,0) circle (2pt);
+  \draw[thick, blue] (0,1) -- (3,1);
+  \draw[fill=blue] (0,1) circle (2pt);
+
+  % Add labels
+  \node[left] at (0,1) {$1$};
+  \node[below left] at (0,0) {$0$};
+\end{tikzpicture}
+    \caption{Unit Step Function}
+    \label{fig:unit_step}
+\end{figure}
+
+
+
 \begin{equation}
-    f(x) = \begin{cases}
+    u(x) = \begin{cases}
         1 & \text{if } x \geq 0 \\
         0 & \text{if } x < 0
     \end{cases}
 \end{equation}
 
+
+
 \subsection*{Sigmoid Function}
 The sigmoid function is a smooth, S-shaped curve that maps any input to a value between 0 and c which is defined as:
+\begin{figure}[h]
+    \centering
+    \begin{tikzpicture}[scale=1.2, axis/.style={very thick, ->, >=stealth}]
+        % Axes
+        \draw[axis] (-3,0) -- (3,0) node[right] {$x$};
+        \draw[axis] (0,-0.1) -- (0,1.1) node[above] {$\sigma(x)$};
+        % Sigmoid curve
+        \draw[thick, blue, domain=-3:3, samples=100, smooth] plot (\x,{1/(1+exp(-\x))});
+        % Dashed lines for y=0.5
+        \draw[dashed, gray] (-3,0.5) -- (3,0.5);
+        \draw[dashed, gray] (0,0) -- (0,1);
+        % Labels
+        \node[left] at (0,1) {$1$};
+        \node[left] at (0,0.5) {$0.5$};
+        \node[below left] at (0,0) {$0$};
+    \end{tikzpicture}
+    \caption{Sigmoid Activation Function}
+    \label{fig:sigmoid}
+\end{figure}
+
 \begin{equation}
     f(x) = \frac{c}{a + be^{-x}}
 \end{equation}
@@ -117,7 +165,6 @@ where a and b are constants that determine the shape of the curve. The sigmoid f
 \subsection*{Dataset}
 In this lab, perceptron was trained to learn the AND, OR and XOR logic gates. The dataset consists of 4 samples for each gate, with 2 input features and 1 output label. The input features are binary values (0 or 1) representing the inputs to the gate, and the output label is also a binary value representing the output of the gate.
 The dataset is as follows:
-
 \begin{table}[ht]
     \centering
     \begin{tabular}{cc|ccc}
@@ -135,9 +182,7 @@ The dataset is as follows:
     \caption{Truth tables for AND, OR, and XOR logic gates}
     \label{tab:logic_gates}
 \end{table}
-
 \section{Experiment \& Model Implementation}
-
 The main components include the sigmoid activation function, the perceptron model, and the training loop. The following code snippets illustrate the key parts of the implementation.
 
 \subsection{Sigmoid Function}
