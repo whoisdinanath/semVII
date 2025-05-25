@@ -1,0 +1,416 @@
+\documentclass{article}
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{geometry}
+\usepackage{mathptmx}
+\geometry{margin=1in}
+\title{Major Milestones and State-of-the-Art Models in AI}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{Computer Vision}
+
+\subsection{Image Classification}
+The evolution of image classification began with early convolutional networks like LeNet-5 (1998) and peaked in deep architectures such as AlexNet (2012). Major milestones and the current state-of-the-art models include:
+
+\begin{itemize}[leftmargin=1.5em]
+  \item \textbf{1998: LeNet-5}
+\begin{itemize}
+    \item 7 layers: input, 2 convolutional, 2 subsampling (pooling), 2 fully connected, output.
+    \item Input: $32 \times 32$ grayscale image.
+    \item Conv1: 6 filters of size $5 \times 5$, stride 1, output $28 \times 28 \times 6$.
+    \item Pool1: $2 \times 2$ average pooling, output $14 \times 14 \times 6$.
+    \item Conv2: 16 filters of size $5 \times 5$, output $10 \times 10 \times 16$.
+    \item Pool2: $2 \times 2$ average pooling, output $5 \times 5 \times 16$.
+    \item FC1: 120 units; FC2: 84 units; Output: 10-way softmax.
+    \item Total parameters: $\sim$60K.
+\end{itemize}
+  
+  \item \textbf{2012: AlexNet} 
+  \begin{itemize}
+    \item 8 layers: 5 convolutional, 3 fully connected.
+    \item Input: $227 \times 227 \times 3$ RGB image.
+    \item Conv1: 96 filters of size $11 \times 11$, stride 4, output $55 \times 55 \times 96$.
+    \item Pool1: $3 \times 3$ max pooling, output $27 \times 27 \times 96$.
+    \item Conv2: 256 filters of size $5 \times 5$, output $13 \times 13 \times 256$.
+    \item Pool2: $3 \times 3$ max pooling, output $6 \times 6 \times 256$.
+    \item Conv3-5: deeper layers with ReLU activations and dropout.
+    \item FC1: 4096 units; FC2: 4096 units; Output: 1000-way softmax.
+    \item Total parameters: $\sim$60M.
+  \end{itemize}
+  \item \textbf{2014: VGG-16/19}
+    \begin{itemize}
+        \item 16/19 layers: 13/16 convolutional, 3 fully connected.
+        \item Input: $224 \times 224 \times 3$ RGB image.
+        \item Conv1-5: 2-3 convolutional layers per block with $3 \times 3$ filters, max pooling after each block.
+        \item FC1: 4096 units; FC2: 4096 units; Output: 1000-way softmax.
+        \item Total parameters: $\sim$138M (VGG-16).
+        \item Known for deep architecture and small receptive fields.
+    \end{itemize}
+  \item \textbf{2014: GoogLeNet (Inception v1)} 
+    \begin{itemize}
+        \item 22 layers: inception modules with parallel convolutions.
+        \item Input: $224 \times 224 \times 3$ RGB image.
+        \item Inception modules with $1 \times 1$, $3 \times 3$, and $5 \times 5$ convolutions.
+        \item Global average pooling instead of fully connected layers.
+        \item Total parameters: $\sim$6.8M.
+        \item Introduced auxiliary classifiers for better gradient flow.
+        \item Known for inception modules that allow multi-scale feature extraction.
+    \end{itemize}
+  \item \textbf{2015: ResNet} 
+    \begin{itemize}
+            \item 152 layers: residual connections to enable very deep networks.
+            \item Input: $224 \times 224 \times 3$ RGB image.
+            \item Residual blocks with skip connections to mitigate vanishing gradients.
+            \item Global average pooling instead of fully connected layers.
+            \item Total parameters: $\sim$60M (ResNet-152).
+            \item Known for enabling training of extremely deep networks.
+        \end{itemize}
+  \item \textbf{2017: DenseNet} 
+    \begin{itemize}
+        \item 121 layers: dense connections between layers.
+        \item Input: $224 \times 224 \times 3$ RGB image.
+        \item Each layer receives feature maps from all previous layers.
+        \item Global average pooling instead of fully connected layers.
+        \item Total parameters: $\sim$8M (DenseNet-121).
+        \item Known for efficient feature reuse and reduced number of parameters.
+    \end{itemize}
+  \item \textbf{2019: EfficientNet} 
+    \begin{itemize}
+        \item 8 models (B0-B7): compound scaling of depth, width, and resolution.
+        \item Input: $224 \times 224 \times 3$ RGB image.
+        \item Mobile inverted bottleneck convolution (MBConv) blocks.
+        \item Global average pooling instead of fully connected layers.
+        \item Total parameters: $\sim$5.3M (EfficientNet-B0) to $\sim$66M (EfficientNet-B7).
+        \item Known for achieving high accuracy with fewer parameters.
+    \end{itemize}
+  \item \textbf{2020-2024: ViT, ConvNeXt, Swin Transformer} 
+    \begin{itemize}
+        \item Vision Transformer (ViT): Transformer architecture applied to image patches.
+        \item ConvNeXt: Modernized ResNet with better performance on ImageNet.
+        \item Swin Transformer: Hierarchical Transformer with shifted windows for local and global attention.
+        \item Known for leveraging self-attention mechanisms for image classification.
+    \end{itemize}
+\end{itemize}
+The current state-of-the-art (SOTA) in image classification is a combination of powerful convolutional neural networks (CNNs) and transformer models. CNNs like EfficientNet and ResNet continue to be dominant, while Vision Transformers (ViT) are also making significant inroads. 
+
+
+\subsection{Image Segmentation}
+Key milestones in semantic segmentation:
+
+\begin{itemize}[leftmargin=1.5em]
+  \item \textbf{2015: FCN} 
+    - Fully Convolutional Networks for pixel-wise classification.
+        \begin{itemize}
+            \item Replaces fully connected layers with convolutional layers.
+            \item Uses upsampling to produce dense predictions.
+            \item Introduced skip connections for better localization.
+        \end{itemize}
+  \item \textbf{2015: U-Net} 
+    - Encoder-decoder architecture for biomedical segmentation.
+        \begin{itemize}
+            \item  Contracting path (encoder) with downsampling.
+            \item  Expansive path (decoder) with upsampling and skip connections.
+            \item  Known for its effectiveness in small datasets.
+        \end{itemize}
+  \item \textbf{2016-2017: SegNet, DeepLab v1-v3}   
+    - Variants of encoder-decoder architectures.
+        \begin{itemize}
+            \item SegNet: Encoder-decoder with max pooling indices for upsampling.
+            \item DeepLab: Atrous convolution for multi-scale context.
+            \item DeepLab v3: Atrous Spatial Pyramid Pooling (ASPP) for robust feature extraction.
+        \end{itemize}
+  \item \textbf{2017: Mask R-CNN} 
+    - Extends Faster R-CNN for instance segmentation.
+        \begin{itemize}
+            \item Adds a branch for predicting segmentation masks.
+            \item Uses Region Proposal Networks (RPN) for object detection.
+            \item Known for its high accuracy in instance segmentation tasks.
+        \end{itemize}
+
+  \item \textbf{2018-2024: PSPNet, HRNet, SETR}
+    - Advanced segmentation architectures.
+        \begin{itemize}
+            \item PSPNet: Pyramid Scene Parsing Network for global context.
+            \item HRNet: High-Resolution Network maintaining high-resolution representations.
+            \item SETR: Transformer-based segmentation with self-attention mechanisms.
+        \end{itemize}
+\end{itemize}
+The current state-of-the-art in image segmentation includes a mix of CNN-based architectures like U-Net and Mask R-CNN, as well as transformer-based models like SETR and HRNet. These models excel in both semantic and instance segmentation tasks, leveraging advanced techniques such as multi-scale feature extraction and self-attention.
+
+\subsection{Object Detection}
+\subsubsection{Two-Stage Detectors:}
+\begin{itemize}[leftmargin=1.5em]
+    \item \textbf{R-CNN (2014):} 
+        \begin{itemize}
+            \item Uses selective search to generate region proposals.
+            \item Extracts features from each region using a CNN.
+            \item Classifies regions with SVMs and refines boxes with regression.
+            \item Slow due to per-region CNN computation.
+        \end{itemize}
+    \item \textbf{Fast R-CNN (2015):}
+        \begin{itemize}
+            \item Processes the whole image with a CNN once.
+            \item Uses RoI pooling to extract features for each region proposal.
+            \item Jointly predicts class and bounding box offsets with a softmax and regression head.
+            \item Faster and more accurate than R-CNN.
+        \end{itemize}
+    \item \textbf{Faster R-CNN (2015):}
+        \begin{itemize}
+            \item Introduces Region Proposal Network (RPN) to generate proposals directly from feature maps.
+            \item Shares convolutional features between RPN and detection network.
+            \item Achieves real-time detection speeds.
+        \end{itemize}
+    \item \textbf{Mask R-CNN (2017):}
+        \begin{itemize}
+            \item Extends Faster R-CNN by adding a parallel branch for predicting segmentation masks.
+            \item Uses RoIAlign for better mask localization.
+            \item Supports both object detection and instance segmentation.
+        \end{itemize}
+\end{itemize}
+
+\subsubsection{One-Stage Detectors:}
+\begin{itemize}[leftmargin=1.5em]
+    \item \textbf{YOLO (v1-v11):} 
+        \begin{itemize}
+            \item Unified architecture that predicts bounding boxes and class probabilities directly from full images in a single forward pass.
+            \item Backbone: Darknet (various versions), CSPNet, or Transformer-based backbones in later versions.
+            \item Known for real-time speed and end-to-end training.
+        \end{itemize}
+    \item \textbf{SSD (Single Shot MultiBox Detector):}
+        \begin{itemize}
+            \item Uses a base network (e.g., VGG-16) with additional convolutional layers for multi-scale feature maps.
+            \item Predicts category scores and box offsets for a fixed set of default bounding boxes.
+            \item Efficient and accurate for real-time detection.
+        \end{itemize}
+    \item \textbf{RetinaNet:}
+        \begin{itemize}
+            \item Backbone: ResNet + Feature Pyramid Network (FPN).
+            \item Introduces focal loss to address class imbalance.
+            \item Dense detection with high accuracy for small and large objects.
+        \end{itemize}
+    \item \textbf{DETR (DEtection TRansformer):}
+        \begin{itemize}
+            \item Transformer-based end-to-end object detector.
+            \item Uses a CNN backbone (e.g., ResNet) for feature extraction, followed by a Transformer encoder-decoder.
+            \item Predicts a fixed set of objects using bipartite matching loss.
+            \item Simplifies the detection pipeline by removing the need for anchor boxes and NMS.
+        \end{itemize}
+\end{itemize}
+
+
+
+\subsection{Image Generation}
+From GANs to diffusion models:
+\begin{itemize}[leftmargin=1.5em]
+    \item \textbf{2014: GAN} - Minimax adversarial loss. \\
+        \textit{Architecture: Two networks (generator and discriminator) trained in opposition.}
+    \item \textbf{2016: DCGAN} - Deep convolutional GAN for stable image generation. \\
+        \textit{Architecture: Uses convolutional layers in both generator and discriminator.}
+    \item \textbf{2017: Pix2Pix, CycleGAN} - Image-to-image translation. \\
+        \textit{Architecture: Encoder-decoder (Pix2Pix) and cycle-consistent GANs (CycleGAN) for unpaired translation.}
+    \item \textbf{2018: BigGAN} - Large-scale GAN for high-fidelity images. \\
+        \textit{Architecture: Scaled-up GAN with class conditioning and large batch sizes.}
+    \item \textbf{2019-2020: StyleGAN1/2} - Style-based generator for controllable synthesis. \\
+        \textit{Architecture: Mapping network and adaptive instance normalization for style control.}
+    \item \textbf{2020-2024: Diffusion Models (DDPM, Stable Diffusion, Imagen)} - Iterative denoising for image synthesis. \\
+        \textit{Architecture: Gradually denoise random noise using a U-Net or Transformer backbone.}
+\end{itemize}
+
+\section{Natural Language Processing}
+
+\subsection{Sentiment Classification}
+\begin{itemize}[leftmargin=1.5em]
+ \item \textbf{2014: CNN/LSTM-based models (Kim, 2014)} - Early deep learning approaches for text representation and classification.
+ \item \textbf{2018: BERT (Google)} - Introduced bidirectional training of Transformers for pre-training and fine-tuning.
+ \item \textbf{2019: RoBERTa (Facebook AI)} - Optimized BERT pretraining, improving performance by modifying key hyperparameters.
+ \item \textbf{2019: XLNet (Google/CMU)} - Generalized autoregressive pretraining that learns bidirectional contexts.
+ \item \textbf{2020-2024: GPT-2/3/4 (OpenAI), T5 (Google), PaLM (Google), Gemini (Google)} - Large-scale autoregressive and encoder-decoder models excelling with fine-tuning and prompting; Gemini offers native multimodality.
+\end{itemize}
+
+\subsection{Text Generation}
+\begin{itemize}[leftmargin=1.5em]
+ \item \textbf{2014: Seq2Seq (Google)} - Encoder-decoder architecture for sequence-to-sequence tasks like machine translation.
+ \item \textbf{2017: Transformer (Google)} - Introduced self-attention mechanism, becoming the foundation for many subsequent models.
+ \item \textbf{2018-2023: GPT-1/2/3/4 (OpenAI)} - Pioneering large-scale autoregressive models for coherent text generation.
+ \item \textbf{2019: T5 (Google)} - A unified Transformer model for all NLP tasks, framed as text-to-text problems.
+ \item \textbf{2023: LLaMA (Meta)} - A collection of foundational large language models for various research and commercial applications.
+ \item \textbf{2022: OPT (Meta)} - Open-source suite of large language models, aiming for broader accessibility in research.
+ \item \textbf{2023-2025: Gemini (Google)} - Multimodal models capable of generating text from diverse inputs (text, image, audio, video).
+ \item Autoregressive decoder (e.g., GPT, Gemini) and encoder-decoder (e.g., T5) used for generation.
+\end{itemize}
+
+\section{Audio}
+
+\subsection{Speech Recognition}
+\begin{itemize}[leftmargin=1.5em]
+ \item \textbf{2015: Listen, Attend and Spell (Google)} - An end-to-end neural network for speech transcription, using attention.
+ \item \textbf{2015: DeepSpeech (Mozilla/Baidu)} - End-to-end speech recognition using recurrent neural networks and CTC loss.
+ \item \textbf{2020: wav2vec 2.0 (Facebook AI)} - Self-supervised learning framework for speech representation learning.
+ \item \textbf{2022: Whisper (OpenAI)} - A large Transformer encoder-decoder model for robust speech recognition and transcription.
+ \item \textbf{2023-2025: Gemini (Google)} - Multimodal models with strong audio understanding capabilities, including transcription and summarization.
+\end{itemize}
+
+\subsection{Text-to-Speech (TTS)}
+\begin{itemize}[leftmargin=1.5em]
+ \item \textbf{2016: WaveNet (DeepMind/Google)} - A groundbreaking generative model for raw audio waveforms, producing highly natural speech.
+ \item \textbf{2017: Tacotron (Google)} - An end-to-end speech synthesis model that generates mel spectrograms from text, followed by a vocoder.
+ \item \textbf{2017: Tacotron 2 (Google)} - Improved version of Tacotron, combining a sequence-to-sequence model with WaveNet for high-quality speech.
+ \item \textbf{2019: FastSpeech (Microsoft)} - A feed-forward network for parallel and faster speech synthesis.
+ \item \textbf{2019: MelGAN (NVIDIA)} - A generative adversarial network for high-fidelity and efficient waveform generation from mel spectrograms.
+ \item \textbf{2020: HiFi-GAN (Kakao Enterprise)} - A fast and high-fidelity GAN-based vocoder for speech synthesis.
+ \item \textbf{2021: VITS (Kakao Enterprise)} - An end-to-end VAE-GAN based TTS model for high-quality and efficient speech synthesis.
+ \item \textbf{2024-2025: Gemini (Google)} - Advanced text-to-speech capabilities, including multi-speaker and expressive audio output (preview).
+\end{itemize}
+
+\section{Recommender Systems}
+\begin{itemize}[leftmargin=1.5em]
+ \item \textbf{1990s-2000s: Collaborative Filtering} - Recommends items based on user preferences or item similarities.
+ \item \textbf{2006: Matrix Factorization} - Decomposes user-item interaction matrices to discover latent features (e.g., Netflix Prize era).
+ \item \textbf{2016: Wide \& Deep (Google)} - Combines the memorization of wide linear models with the generalization of deep neural networks.
+ \item \textbf{2017: NCF (Neural Collaborative Filtering)} - Replaces matrix factorization with a neural network for modeling user-item interactions.
+ \item \textbf{2017: DeepFM} - Integrates Factorization Machines with deep neural networks for feature interactions.
+ \item \textbf{2017: xDeepFM} - Explicitly models feature interactions at different orders in a compressed interaction network.
+ \item \textbf{2018+: SASRec (Self-Attentive Sequential Recommendation)} - Uses Transformer architecture to model sequential user behavior for next-item prediction.
+ \item \textbf{2019+: LightGCN (Graph Convolutional Networks)} - Simplifies GCNs for recommendations by only keeping neighborhood aggregation in graph convolutions.
+\end{itemize}
+
+\section{Robotics}
+
+\textbf{Deep Reinforcement Learning Models:}
+\begin{itemize}[leftmargin=1.5em]
+ \item \textbf{2015: DQN (Deep Q-Network, DeepMind/Google)} - First deep RL model to achieve human-level control in Atari games.
+ \item \textbf{2016: A3C (Asynchronous Advantage Actor-Critic, DeepMind/Google)} - A parallel asynchronous RL algorithm for efficient training.
+ \item \textbf{2017: PPO (Proximal Policy Optimization, OpenAI)} - A stable and efficient policy gradient method widely used in practice.
+ \item \textbf{2015: DDPG (Deep Deterministic Policy Gradient)} - An actor-critic, model-free algorithm for continuous action spaces.
+ \item \textbf{2018: SAC (Soft Actor-Critic)} - An off-policy actor-critic algorithm aiming for maximum entropy reinforcement learning.
+ \item \textbf{2016/2017: AlphaGo/Zero (DeepMind/Google)} - Mastered Go using deep neural networks combined with Monte Carlo Tree Search.
+\end{itemize}
+
+\textbf{Sim-to-Real:} Domain adaptation techniques using randomized simulations to transfer policies from simulation to physical robots.
+
+\textbf{Architectures:} CNNs for vision tasks; MLPs and dedicated policy/value networks for control; common losses include Bellman error, clipped surrogate (PPO), and entropy regularization.
+
+% \begin{thebibliography}{10}
+% \bibitem{Krizhevsky2012} A.~Krizhevsky, I.~Sutskever, and G.~Hinton, ``ImageNet Classification with Deep Convolutional Neural Networks,'' in \textit{NeurIPS}, 2012.
+% \bibitem{He2016} K.~He, X.~Zhang, S.~Ren, and J.~Sun, ``Deep Residual Learning for Image Recognition,'' in \textit{CVPR}, 2016.
+% \bibitem{Mnih2015} V.~Mnih et al., ``Human-Level Control through Deep Reinforcement Learning,'' \textit{Nature}, vol.~518, 2015.
+% \bibitem{Long2015} J.~Long, E.~Shelhamer, and T.~Darrell, ``Fully Convolutional Networks for Semantic Segmentation,'' in \textit{CVPR}, 2015.
+% \bibitem{Ronneberger2015} O.~Ronneberger, P.~Fischer, and T.~Brox, ``U-Net: Convolutional Networks for Biomedical Image Segmentation,'' in \textit{MICCAI}, 2015.
+% \bibitem{He2017Mask} K.~He, G.~Gkioxari, P.~Dollár, and R.~Girshick, ``Mask R-CNN,'' in \textit{ICCV}, 2017.
+% \bibitem{Redmon2016} J.~Redmon, S.~Divvala, R.~Girshick, and A.~Farhadi, ``You Only Look Once: Unified, Real-Time Object Detection,'' in \textit{CVPR}, 2016.
+% \bibitem{Brown2020} T.~Brown et al., ``Language Models are Few-Shot Learners,'' in \textit{NeurIPS}, 2020.
+% \bibitem{He2017NCF} X.~He et al., ``Neural Collaborative Filtering,'' in \textit{WWW}, 2017.
+% \end{thebibliography}
+
+\begin{thebibliography}{10}
+
+% Image Classification
+\bibitem{LeCun1998} Y.~LeCun et al., ``Gradient-Based Learning Applied to Document Recognition,'' \textit{Proceedings of the IEEE}, vol.~86, no.~11, pp.~2278-2324, 1998.
+\bibitem{Krizhevsky2012} A.~Krizhevsky, I.~Sutskever, and G.~Hinton, ``ImageNet Classification with Deep Convolutional Neural Networks,'' in \textit{NeurIPS}, 2012.
+\bibitem{Simonyan2014} K.~Simonyan and A.~Zisserman, ``Very Deep Convolutional Networks for Large-Scale Image Recognition,'' in \textit{ICLR}, 2015. (Originally arXiv 2014)
+\bibitem{Szegedy2015} C.~Szegedy et al., ``Going Deeper with Convolutions,'' in \textit{CVPR}, 2015.
+\bibitem{He2016} K.~He, X.~Zhang, S.~Ren, and J.~Sun, ``Deep Residual Learning for Image Recognition,'' in \textit{CVPR}, 2016.
+\bibitem{Huang2017} G.~Huang et al., ``Densely Connected Convolutional Networks,'' in \textit{CVPR}, 2017.
+\bibitem{Tan2019} M.~Tan and Q.~V.~Le, ``EfficientNet: Rethinking Model Scaling for Convolutional Neural Networks,'' in \textit{ICML}, 2019.
+\bibitem{Dosovitskiy2020} A.~Dosovitskiy et al., ``An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale,'' in \textit{ICLR}, 2021. (Originally arXiv 2020)
+\bibitem{Touvron2021} H.~Touvron et al., ``Training data-efficient Image Transformers \& Distillation through attention,'' in \textit{ICML}, 2021.
+\bibitem{Liu2021} Z.~Liu et al., ``Swin Transformer: Hierarchical Vision Transformer using Shifted Windows,'' in \textit{ICCV}, 2021.
+
+% Image Segmentation
+\bibitem{Long2015} J.~Long, E.~Shelhamer, and T.~Darrell, ``Fully Convolutional Networks for Semantic Segmentation,'' in \textit{CVPR}, 2015.
+\bibitem{Ronneberger2015} O.~Ronneberger, P.~Fischer, and T.~Brox, ``U-Net: Convolutional Networks for Biomedical Image Segmentation,'' in \textit{MICCAI}, 2015.
+\bibitem{Badrinarayanan2017} V.~Badrinarayanan, A.~Kendall, and R.~Cipolla, ``SegNet: A Deep Convolutional Encoder-Decoder Architecture for Image Segmentation,'' \textit{IEEE TPAMI}, 2017. (Originally arXiv 2015)
+\bibitem{Chen2017DeepLab} L.-C.~Chen et al., ``DeepLab: Semantic Image Segmentation with Deep Convolutional Nets, Atrous Convolution, and Fully Connected CRFs,'' \textit{IEEE TPAMI}, 2017.
+\bibitem{Chen2017DeepLabv3} L.-C.~Chen et al., ``Rethinking Atrous Convolution for Semantic Image Segmentation,'' in \textit{ICLR}, 2017.
+\bibitem{He2017Mask} K.~He, G.~Gkioxari, P.~Dollár, and R.~Girshick, ``Mask R-CNN,'' in \textit{ICCV}, 2017.
+\bibitem{Zhao2017PSPNet} H.~Zhao et al., ``Pyramid Scene Parsing Network,'' in \textit{CVPR}, 2017.
+\bibitem{Sun2019HRNet} K.~Sun et al., ``Deep High-Resolution Representation Learning for Human Pose Estimation,'' in \textit{CVPR}, 2019. (Applied to segmentation later)
+\bibitem{Zheng2021SETR} S.~Zheng et al., ``SETR: Rethinking Semantic Segmentation from a Sequence-to-Sequence Perspective with Transformers,'' in \textit{CVPR}, 2021.
+
+% Object Detection (Two-Stage)
+\bibitem{Girshick2014RCNN} R.~Girshick et al., ``Rich Feature Hierarchies for Accurate Object Detection and Semantic Segmentation,'' in \textit{CVPR}, 2014.
+\bibitem{Girshick2015FastRCNN} R.~Girshick, ``Fast R-CNN,'' in \textit{ICCV}, 2015.
+\bibitem{Ren2015FasterRCNN} S.~Ren et al., ``Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks,'' in \textit{NeurIPS}, 2015.
+
+% Object Detection (One-Stage)
+\bibitem{Redmon2016} J.~Redmon, S.~Divvala, R.~Girshick, and A.~Farhadi, ``You Only Look Once: Unified, Real-Time Object Detection,'' in \textit{CVPR}, 2016.
+\bibitem{Redmon2017YOLO9000} J.~Redmon and A.~Farhadi, ``YOLO9000: Better, Faster, Stronger,'' in \textit{CVPR}, 2017.
+\bibitem{Redmon2018YOLOv3} J.~Redmon and A.~Farhadi, ``YOLOv3: An Incremental Improvement,'' arXiv preprint arXiv:1804.02767, 2018.
+\bibitem{Liu2016SSD} W.~Liu et al., ``SSD: Single Shot MultiBox Detector,'' in \textit{ECCV}, 2016.
+\bibitem{Lin2017RetinaNet} T.-Y.~Lin et al., ``Focal Loss for Dense Object Detection,'' in \textit{ICCV}, 2017.
+\bibitem{Carion2020DETR} N.~Carion et al., ``End-to-End Object Detection with Transformers,'' in \textit{ECCV}, 2020.
+
+% Image Generation
+\bibitem{Goodfellow2014GAN} I.~Goodfellow et al., ``Generative Adversarial Nets,'' in \textit{NeurIPS}, 2014.
+\bibitem{Radford2016DCGAN} A.~Radford, L.~Metz, and S.~Chintala, ``Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks,'' in \textit{ICLR}, 2016.
+\bibitem{Isola2017Pix2Pix} P.~Isola et al., ``Image-to-Image Translation with Conditional Adversarial Networks,'' in \textit{CVPR}, 2017.
+\bibitem{Zhu2017CycleGAN} Z.~Zhu et al., ``Unpaired Image-to-Image Translation using Cycle-Consistent Adversarial Networks,'' in \textit{ICCV}, 2017.
+\bibitem{Brock2019BigGAN} A.~Brock, J.~Donahue, and K.~Simonyan, ``Large Scale GAN Training for High Fidelity Natural Image Synthesis,'' in \textit{ICLR}, 2019.
+\bibitem{Karras2019StyleGAN} T.~Karras, S.~Laine, and T.~Aila, ``A Style-Based Generator Architecture for Generative Adversarial Networks,'' in \textit{CVPR}, 2019.
+\bibitem{Karras2020StyleGAN2} T.~Karras, S.~Laine, M.~Aittala, J.~Hellsten, J.~Pulkkinen, and T.~Aila, ``Analyzing and Improving the Image Quality of StyleGAN,'' in \textit{NeurIPS}, 2020.
+\bibitem{Ho2020DDPM} J.~Ho, A.~Jain, and P.~Abbeel, ``Denoising Diffusion Probabilistic Models,'' in \textit{NeurIPS}, 2020.
+\bibitem{Rombach2022StableDiffusion} R.~Rombach et al., ``High-Resolution Image Synthesis with Latent Diffusion Models,'' in \textit{CVPR}, 2022.
+\bibitem{Saharia2022Imagen} C.~Saharia et al., ``Photorealistic Text-to-Image Diffusion Models with Deep Language Understanding,'' in \textit{NeurIPS}, 2022.
+
+% Natural Language Processing
+\bibitem{Kim2014CNN} Y.~Kim, ``Convolutional Neural Networks for Sentence Classification,'' in \textit{EMNLP}, 2014.
+\bibitem{Devlin2019BERT} J.~Devlin et al., ``BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding,'' in \textit{NAACL-HLT}, 2019.
+\bibitem{Liu2019RoBERTa} Y.~Liu et al., ``RoBERTa: A Robustly Optimized BERT Pretraining Approach,'' arXiv preprint arXiv:1907.11692, 2019.
+\bibitem{Yang2019XLNet} Z.~Yang et al., ``XLNet: Generalized Autoregressive Pretraining for Language Understanding,'' in \textit{NeurIPS}, 2019.
+\bibitem{Radford2019GPT2} A.~Radford et al., ``Language Models are Unsupervised Multitask Learners,'' OpenAI Blog, 2019. (No formal peer-reviewed paper)
+\bibitem{Brown2020} T.~Brown et al., ``Language Models are Few-Shot Learners,'' in \textit{NeurIPS}, 2020.
+\bibitem{OpenAI2023GPT4} OpenAI, ``GPT-4 Technical Report,'' arXiv preprint arXiv:2303.08774, 2023.
+\bibitem{Raffel2020T5} C.~Raffel et al., ``Exploring the Limits of Transfer Learning with a Unified Text-to-Text Transformer,'' \textit{JMLR}, 2020.
+\bibitem{Chowdhery2022PaLM} A.~Chowdhery et al., ``PaLM: Scaling Language Modeling with Pathways,'' arXiv preprint arXiv:2204.02311, 2022.
+\bibitem{Google2023Gemini} Google, ``Gemini: A Family of Highly Capable Multimodal Models,'' arXiv preprint arXiv:2312.11805, 2023.
+\bibitem{Sutskever2014Seq2Seq} I.~Sutskever, O.~Vinyals, and Q.~V.~Le, ``Sequence to Sequence Learning with Neural Networks,'' in \textit{NeurIPS}, 2014.
+\bibitem{Vaswani2017Transformer} A.~Vaswani et al., ``Attention Is All You Need,'' in \textit{NeurIPS}, 2017.
+\bibitem{Radford2018GPT} A.~Radford et al., ``Improving Language Understanding by Generative Pre-Training,'' OpenAI Blog, 2018.
+\bibitem{Touvron2023LLaMA} H.~Touvron et al., ``LLaMA: Open and Efficient Foundation Language Models,'' arXiv preprint arXiv:2302.13971, 2023.
+\bibitem{Zhang2022OPT} B.~Zhang et al., ``OPT: Open Pre-trained Transformer Language Models,'' arXiv preprint arXiv:2205.01068, 2022.
+
+% Audio
+\bibitem{Chan2016LAS} W.~Chan et al., ``Listen, Attend and Spell: A Neural Network for Large Vocabulary Conversational Speech Recognition,'' in \textit{ICASSP}, 2016.
+\bibitem{Hannun2014DeepSpeech} A.~Hannun et al., ``Deep Speech: Scaling up end-to-end speech recognition,'' arXiv preprint arXiv:1412.5567, 2014.
+\bibitem{Baevski2020wav2vec2} A.~Baevski et al., ``wav2vec 2.0: A Framework for Self-Supervised Learning of Speech Representations,'' in \textit{NeurIPS}, 2020.
+\bibitem{Radford2023Whisper} A.~Radford et al., ``Robust Speech Recognition via Large-Scale Weak Supervision,'' in \textit{ICML}, 2023.
+
+% Text-to-Speech (TTS)
+\bibitem{vanDenOord2016WaveNet} A.~van den Oord et al., ``WaveNet: A Generative Model for Raw Audio,'' arXiv preprint arXiv:1609.03499, 2016.
+\bibitem{Wang2017Tacotron} Y.~Wang et al., ``Tacotron: Towards End-to-End Speech Synthesis,'' in \textit{Interspeech}, 2017.
+\bibitem{Shen2018Tacotron2} J.~Shen et al., ``Natural TTS Synthesis by Conditioning WaveNet on Mel Spectrogram Predictions,'' in \textit{ICASSP}, 2018.
+\bibitem{Ren2019FastSpeech} Y.~Ren et al., ``FastSpeech: Fast, Robust and Controllable Text to Speech,'' in \textit{NeurIPS}, 2019.
+\bibitem{Kumar2019MelGAN} K.~Kumar et al., ``MelGAN: Generative Adversarial Networks for Conditional Waveform Synthesis,'' in \textit{NeurIPS}, 2019.
+\bibitem{Kong2020HiFiGAN} J.~Kong, P.~Ren, and J.~Liu, ``HiFi-GAN: Generative Adversarial Networks for Efficient and High Fidelity Speech Synthesis,'' in \textit{NeurIPS}, 2020.
+\bibitem{Kim2021VITS} J.~Kim, J.~Kong, and J.~Choi, ``Conditional Variational Autoencoder with Adversarial Learning for End-to-End Text-to-Speech,'' in \textit{ICML}, 2021.
+
+% Recommender Systems
+\bibitem{Resnick1997CollaborativeFiltering} P.~Resnick and H.~R.~Varian, ``Recommender Systems,'' \textit{Communications of the ACM}, vol.~40, no.~3, pp.~56-58, 1997.
+\bibitem{Koren2009MatrixFactorization} Y.~Koren, R.~Bell, and C.~Volinsky, ``Matrix Factorization Techniques for Recommender Systems,'' \textit{Computer}, vol.~42, no.~8, pp.~30-37, 2009.
+\bibitem{Cheng2016WideDeep} H.-T.~Cheng et al., ``Wide \& Deep Learning for Recommender Systems,'' in \textit{RecSys}, 2016.
+\bibitem{He2017NCF} X.~He et al., ``Neural Collaborative Filtering,'' in \textit{WWW}, 2017.
+\bibitem{Guo2017DeepFM} H.~Guo et al., ``DeepFM: A Factorization-Supported Neural Network for CTR Prediction,'' in \textit{IJCAI}, 2017.
+\bibitem{Lian2018xDeepFM} J.~Lian et al., ``xDeepFM: Combining Explicit and Implicit Feature Interactions for Recommender Systems,'' in \textit{KDD}, 2018.
+\bibitem{Kang2018SASRec} W.~Kang and J.~Choi, ``Self-Attentive Sequential Recommendation,'' in \textit{ICDM}, 2018.
+\bibitem{He2020LightGCN} X.~He et al., ``LightGCN: Simplifying and Powering Graph Convolution Network for Recommendation,'' in \textit{SIGIR}, 2020.
+
+% Robotics
+\bibitem{Mnih2015} V.~Mnih et al., ``Human-Level Control through Deep Reinforcement Learning,'' \textit{Nature}, vol.~518, pp.~529-533, 2015.
+\bibitem{Mnih2016A3C} V.~Mnih et al., ``Asynchronous Methods for Deep Reinforcement Learning,'' in \textit{ICML}, 2016.
+\bibitem{Schulman2017PPO} J.~Schulman et al., ``Proximal Policy Optimization Algorithms,'' arXiv preprint arXiv:1707.06347, 2017.
+\bibitem{Lillicrap2016DDPG} T.~P.~Lillicrap et al., ``Continuous Control with Deep Reinforcement Learning,'' in \textit{ICLR}, 2016.
+\bibitem{Haarnoja2018SAC} T.~Haarnoja et al., ``Soft Actor-Critic: Off-Policy Maximum Entropy Deep Reinforcement Learning with a Stochastic Actor,'' in \textit{ICML}, 2018.
+\bibitem{Silver2016AlphaGo} D.~Silver et al., ``Mastering the game of Go with deep neural networks and tree search,'' \textit{Nature}, vol.~529, no.~7587, pp.~484-489, 2016.
+\bibitem{Silver2017AlphaGoZero} D.~Silver et al., ``Mastering the game of Go without human knowledge,'' \textit{Nature}, vol.~550, no.~7676, pp.~354-359, 2017.
+\bibitem{Tobin2017DomainRandomization} J.~Tobin et al., ``Domain Randomization for Transferring Deep Neural Networks from Simulation to the Real World,'' in \textit{IROS}, 2017.
+
+\end{thebibliography}
+
+\end{document}

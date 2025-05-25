@@ -1,0 +1,427 @@
+\documentclass{article}
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{geometry}
+\usepackage{mathptmx}
+\geometry{margin=1in}
+\title{\textbf{Major Milestones and State-of-the-Art Models in AI}}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{Computer Vision}
+
+\subsection{Image Classification}
+The evolution of image classification began with early convolutional networks like LeNet-5 (1998) and peaked in deep architectures such as AlexNet (2012). Major milestones and the current state-of-the-art models include:
+
+\begin{itemize}[leftmargin=1.5em]
+ \item \textbf{1998: LeNet-5}
+  \begin{itemize}
+    \item 7-layer CNN with convolutional and pooling layers for digit recognition.
+    \item Input: $32 \times 32$ grayscale image.
+    \item Total parameters: $\sim$60K.
+  \end{itemize}
+ 
+ \item \textbf{2012: AlexNet} 
+  \begin{itemize}
+    \item 8-layer deep CNN, winning ImageNet 2012, showcasing ReLU and dropout.
+    \item Input: $227 \times 227 \times 3$ RGB image.
+    \item Total parameters: $\sim$60M.
+  \end{itemize}
+ \item \textbf{2014: VGG-16/19}
+  \begin{itemize}
+    \item 16/19 layers: known for deep architecture and small $3 \times 3$ receptive fields.
+    \item Input: $224 \times 224 \times 3$ RGB image.
+    \item Total parameters: $\sim$138M (VGG-16).
+  \end{itemize}
+ \item \textbf{2014: GoogLeNet (Inception v1)} 
+  \begin{itemize}
+    \item 22 layers: introduced inception modules for multi-scale feature extraction and reduced parameters.
+    \item Input: $224 \times 224 \times 3$ RGB image.
+    \item Total parameters: $\sim$6.8M.
+  \end{itemize}
+ \item \textbf{2015: ResNet} 
+  \begin{itemize}
+    \item 152 layers: introduced residual connections to enable training of very deep networks and mitigate vanishing gradients.
+    \item Input: $224 \times 224 \times 3$ RGB image.
+    \item Total parameters: $\sim$60M (ResNet-152).
+  \end{itemize}
+ \item \textbf{2017: DenseNet} 
+  \begin{itemize}
+    \item 121 layers: dense connections between layers for efficient feature reuse and reduced parameters.
+    \item Input: $224 \times 224 \times 3$ RGB image.
+    \item Total parameters: $\sim$8M (DenseNet-121).
+  \end{itemize}
+ \item \textbf{2019: EfficientNet} 
+  \begin{itemize}
+    \item 8 models (B0-B7): compound scaling of depth, width, and resolution, achieving high accuracy with fewer parameters.
+    \item Input: $224 \times 224 \times 3$ RGB image.
+    \item Total parameters: $\sim$5.3M (EfficientNet-B0) to $\sim$66M (EfficientNet-B7).
+  \end{itemize}
+ \item \textbf{2020-2024: ViT, ConvNeXt, Swin Transformer} 
+  \begin{itemize}
+    \item Vision Transformer (ViT): Transformer architecture applied to image patches.
+    \item ConvNeXt: Modernized ResNet with better performance on ImageNet.
+    \item Swin Transformer: Hierarchical Transformer with shifted windows for local and global attention.
+    \item Known for leveraging self-attention mechanisms for image classification.
+  \end{itemize}
+\end{itemize}
+\textbf{Current State-of-the-Art (SOTA):} The SOTA in image classification is dominated by powerful convolutional neural networks (CNNs) like the EfficientNet family and deep ResNet variants, alongside increasingly prominent Vision Transformers (ViT) and their hierarchical counterparts like Swin Transformer, leveraging self-attention for global context.
+
+\subsection{Image Segmentation}
+Key milestones in semantic segmentation:
+
+\begin{itemize}[leftmargin=1.5em]
+ \item \textbf{2015: FCN (Fully Convolutional Networks)} 
+  \begin{itemize}
+    \item First end-to-end network for pixel-wise classification, using upsampling and skip connections.
+  \end{itemize}
+ \item \textbf{2015: U-Net} 
+  \begin{itemize}
+    \item Encoder-decoder architecture with symmetric skip connections, highly effective for biomedical segmentation with small datasets.
+  \end{itemize}
+ \item \textbf{2016-2017: SegNet, DeepLab v1-v3}  
+  \begin{itemize}
+    \item SegNet: Encoder-decoder with max pooling indices for efficient upsampling.
+    \item DeepLab: Series of models introducing atrous convolution and Atrous Spatial Pyramid Pooling (ASPP) for multi-scale context.
+  \end{itemize}
+ \item \textbf{2017: Mask R-CNN} 
+  \begin{itemize}
+    \item Extends Faster R-CNN by adding a parallel branch for predicting segmentation masks, enabling high-accuracy instance segmentation.
+  \end{itemize}
+ \item \textbf{2018-2024: PSPNet, HRNet, SETR}
+  \begin{itemize}
+    \item PSPNet: Pyramid Scene Parsing Network for global context aggregation.
+    \item HRNet: High-Resolution Network that maintains high-resolution representations throughout the network.
+    \item SETR: Transformer-based segmentation model leveraging self-attention mechanisms for global context.
+  \end{itemize}
+\end{itemize}
+\textbf{Current State-of-the-Art (SOTA):} The SOTA in image segmentation encompasses advanced CNN-based architectures like U-Net derivatives and Mask R-CNN for instance segmentation, alongside increasingly dominant transformer-based models (e.g., SETR, SegFormer) that excel in both semantic and instance segmentation tasks by capturing long-range dependencies.
+
+\subsection{Object Detection}
+\subsubsection{Two-Stage Detectors:}
+\begin{itemize}[leftmargin=1.5em]
+  \item \textbf{R-CNN (2014):} 
+    \begin{itemize}
+      \item Pioneering approach using selective search for region proposals, followed by CNN feature extraction and SVM classification; slow due to per-region computation.
+    \end{itemize}
+  \item \textbf{Fast R-CNN (2015):}
+    \begin{itemize}
+      \item Improves R-CNN by processing the whole image once with a CNN and using RoI pooling for feature extraction, leading to faster and more accurate detection.
+    \end{itemize}
+  \item \textbf{Faster R-CNN (2015):}
+    \begin{itemize}
+      \item Introduces a Region Proposal Network (RPN) to generate proposals directly from feature maps, sharing features with the detection network for real-time speed.
+    \end{itemize}
+  \item \textbf{Mask R-CNN (2017):}
+    \begin{itemize}
+      \item Extends Faster R-CNN by adding a parallel branch for predicting segmentation masks, enabling both object detection and high-quality instance segmentation.
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{One-Stage Detectors:}
+\begin{itemize}[leftmargin=1.5em]
+  \item \textbf{YOLO (v1-v11):} 
+    \begin{itemize}
+      \item "You Only Look Once" unified architecture, predicting bounding boxes and class probabilities directly from full images in a single pass, known for real-time speed.
+    \end{itemize}
+  \item \textbf{SSD (Single Shot MultiBox Detector):}
+    \begin{itemize}
+      \item Uses multi-scale feature maps and predicts category scores and box offsets for default bounding boxes, achieving efficient and accurate real-time detection.
+    \end{itemize}
+  \item \textbf{RetinaNet:}
+    \begin{itemize}
+      \item Uses a Feature Pyramid Network (FPN) and introduces focal loss to address class imbalance, leading to high accuracy for dense detection.
+    \end{itemize}
+  \item \textbf{DETR (DEtection TRansformer):}
+    \begin{itemize}
+      \item A Transformer-based end-to-end object detector that simplifies the pipeline by removing the need for anchor boxes and Non-Maximum Suppression (NMS).
+    \end{itemize}
+\end{itemize}
+\textbf{Current State-of-the-Art (SOTA):} The SOTA in object detection is a dynamic field with highly optimized one-stage detectors (e.g., various YOLO versions, EfficientDet) providing speed and accuracy, while transformer-based models (e.g., DETR and its variants) are increasingly competitive by simplifying the detection pipeline and achieving strong performance.
+
+\subsection{Image Generation}
+From GANs to diffusion models:
+\begin{itemize}[leftmargin=1.5em]
+  \item \textbf{2014: GAN (Generative Adversarial Networks)}
+    \begin{itemize}
+      \item Minimax adversarial loss for learning to generate data distribution using a generator and discriminator trained in opposition.
+    \end{itemize}
+  \item \textbf{2016: DCGAN (Deep Convolutional GAN)}
+    \begin{itemize}
+      \item Applied convolutional layers for stable and higher-quality image generation.
+    \end{itemize}
+  \item \textbf{2017: Pix2Pix, CycleGAN}
+    \begin{itemize}
+      \item Models for image-to-image translation tasks, using encoder-decoder (Pix2Pix) and cycle-consistent GANs (CycleGAN) for unpaired translation.
+    \end{itemize}
+  \item \textbf{2018: BigGAN}
+    \begin{itemize}
+      \item Large-scale GAN for high-fidelity, diverse image synthesis at high resolutions with class conditioning and large batch sizes.
+    \end{itemize}
+  \item \textbf{2019-2020: StyleGAN1/2}
+    \begin{itemize}
+      \item Introduced a style-based generator for highly controllable and disentangled image synthesis using a mapping network and adaptive instance normalization.
+    \end{itemize}
+  \item \textbf{2020-2024: Diffusion Models (DDPM, Stable Diffusion, Imagen)}
+    \begin{itemize}
+      \item Iterative denoising process for high-quality and diverse image synthesis, typically using a U-Net or Transformer backbone.
+    \end{itemize}
+\end{itemize}
+\textbf{Current State-of-the-Art (SOTA):} Diffusion models (e.g., Stable Diffusion, Midjourney, Imagen) are currently the SOTA in image generation, demonstrating unparalleled fidelity, diversity, and controllability from text prompts, surpassing GANs in many benchmarks.
+
+\section{Natural Language Processing}
+
+\subsection{Sentiment Classification}
+\begin{itemize}[leftmargin=1.5em]
+\item \textbf{2014: CNN/LSTM-based models (Kim, 2014)}
+  \begin{itemize}
+    \item Early deep learning approaches for text representation and classification.
+  \end{itemize}
+\item \textbf{2018: BERT (Google)}
+  \begin{itemize}
+    \item Introduced bidirectional training of Transformers for pre-training and fine-tuning, revolutionizing contextual embeddings.
+  \end{itemize}
+\item \textbf{2019: RoBERTa (Facebook AI)}
+  \begin{itemize}
+    \item Optimized BERT pretraining, improving performance by modifying key hyperparameters and training data.
+  \end{itemize}
+\item \textbf{2019: XLNet (Google/CMU)}
+  \begin{itemize}
+    \item Generalized autoregressive pretraining that learns bidirectional contexts through a permutation-based approach.
+  \end{itemize}
+\item \textbf{2020-2024: GPT-2/3/4 (OpenAI), T5 (Google), PaLM (Google), Gemini (Google)}
+  \begin{itemize}
+    \item Large-scale autoregressive and encoder-decoder models excelling with fine-tuning and prompting; Gemini offers native multimodality.
+  \end{itemize}
+\end{itemize}
+\textbf{Current State-of-the-Art (SOTA):} The SOTA for sentiment classification relies heavily on large pre-trained language models (LLMs) like those from the BERT, RoBERTa, and fine-tuned GPT/Gemini families, leveraging their deep contextual understanding for high accuracy.
+
+\subsection{Text Generation}
+\begin{itemize}[leftmargin=1.5em]
+\item \textbf{2014: Seq2Seq (Google)}
+  \begin{itemize}
+    \item Encoder-decoder architecture for sequence-to-sequence tasks like machine translation.
+  \end{itemize}
+\item \textbf{2017: Transformer (Google)}
+  \begin{itemize}
+    \item Introduced the self-attention mechanism, becoming the foundational architecture for most modern large language models.
+  \end{itemize}
+\item \textbf{2018-2023: GPT-1/2/3/4 (OpenAI)}
+  \begin{itemize}
+    \item Pioneering large-scale autoregressive models that generate highly coherent and diverse text.
+  \end{itemize}
+\item \textbf{2019: T5 (Google)}
+  \begin{itemize}
+    \item A unified Transformer model framing all NLP tasks as text-to-text problems, allowing for multi-task learning.
+  \end{itemize}
+\item \textbf{2023: LLaMA (Meta)}
+  \begin{itemize}
+    \item A collection of foundational large language models designed for efficiency and broad research/commercial applications.
+  \end{itemize}
+\item \textbf{2022: OPT (Meta)}
+  \begin{itemize}
+    \item Open-source suite of large language models, aiming for broader accessibility and reproducibility in research.
+  \end{itemize}
+\item \textbf{2023-2025: Gemini (Google)}
+  \begin{itemize}
+    \item Multimodal models capable of generating text from diverse inputs (text, image, audio, video), representing advanced reasoning capabilities.
+  \end{itemize}
+\item Autoregressive decoder (e.g., GPT, Gemini) and encoder-decoder (e.g., T5) used for generation.
+\end{itemize}
+\textbf{Current State-of-the-Art (SOTA):} The SOTA in text generation is dominated by ever-larger, transformer-based autoregressive models like GPT-4, Gemini, and LLaMA derivatives, exhibiting remarkable fluency, coherence, and ability to follow complex instructions across various domains.
+
+\section{Audio}
+
+\subsection{Speech Recognition}
+\begin{itemize}[leftmargin=1.5em]
+\item \textbf{2015: Listen, Attend and Spell (Google)}
+  \begin{itemize}
+    \item An early end-to-end neural network for large vocabulary speech transcription using attention mechanisms.
+  \end{itemize}
+\item \textbf{2015: DeepSpeech (Mozilla/Baidu)}
+  \begin{itemize}
+    \item End-to-end speech recognition using recurrent neural networks and Connectionist Temporal Classification (CTC) loss.
+  \end{itemize}
+\item \textbf{2020: wav2vec 2.0 (Facebook AI)}
+  \begin{itemize}
+    \item A self-supervised learning framework that learns powerful speech representations from vast amounts of unlabeled audio.
+  \end{itemize}
+\item \textbf{2022: Whisper (OpenAI)}
+  \begin{itemize}
+    \item A large Transformer encoder-decoder model for robust speech recognition and transcription across multiple languages, trained on diverse audio data.
+  \end{itemize}
+\item \textbf{2023-2025: Gemini (Google)}
+  \begin{itemize}
+    \item Multimodal models with strong native audio understanding capabilities, enabling advanced transcription, summarization, and audio analysis.
+  \end{itemize}
+\end{itemize}
+\textbf{Current State-of-the-Art (SOTA):} The SOTA in speech recognition is led by large transformer-based models like OpenAI's Whisper and Google's Gemini, leveraging vast pre-training data and self-supervised learning to achieve highly accurate and robust transcription across languages and noisy environments.
+
+\subsection{Text-to-Speech (TTS)}
+\begin{itemize}[leftmargin=1.5em]
+\item \textbf{2016: WaveNet (DeepMind/Google)}
+  \begin{itemize}
+    \item A groundbreaking generative model for raw audio waveforms, producing highly natural and expressive speech.
+  \end{itemize}
+\item \textbf{2017: Tacotron (Google)}
+  \begin{itemize}
+    \item An end-to-end speech synthesis model that generates mel spectrograms from text, later converted to audio by a vocoder.
+  \end{itemize}
+\item \textbf{2017: Tacotron 2 (Google)}
+  \begin{itemize}
+    \item Improved version of Tacotron, combining a sequence-to-sequence model with WaveNet for even higher-quality speech synthesis.
+  \end{itemize}
+\item \textbf{2019: FastSpeech (Microsoft)}
+  \begin{itemize}
+    \item A feed-forward network enabling parallel and significantly faster speech synthesis without sacrificing quality.
+  \end{itemize}
+\item \textbf{2019: MelGAN (NVIDIA)}
+  \begin{itemize}
+    \item A generative adversarial network for high-fidelity and efficient waveform generation from mel spectrograms.
+  \end{itemize}
+\item \textbf{2020: HiFi-GAN (Kakao Enterprise)}
+  \begin{itemize}
+    \item A fast and high-fidelity GAN-based vocoder for real-time speech synthesis.
+  \end{itemize}
+\item \textbf{2021: VITS (Kakao Enterprise)}
+  \begin{itemize}
+    \item An end-to-end VAE-GAN based TTS model achieving high-quality and efficient speech synthesis with prosody control.
+  \end{itemize}
+\item \textbf{2024-2025: Gemini (Google)}
+  \begin{itemize}
+    \item Advanced text-to-speech capabilities, including multi-speaker, expressive, and contextually aware audio output (currently in preview/development for broader application).
+  \end{itemize}
+\end{itemize}
+\textbf{Current State-of-the-Art (SOTA):} The SOTA in text-to-speech focuses on producing highly natural, expressive, and controllable speech, often using end-to-end models like VITS, FastSpeech2, or advanced neural vocoders (e.g., HiFi-GAN) combined with sophisticated acoustic models, with multimodal models like Gemini pushing capabilities further into context-aware speech generation.
+
+\section{Recommender Systems}
+\begin{itemize}[leftmargin=1.5em]
+\item \textbf{1990s-2000s: Collaborative Filtering}
+  \begin{itemize}
+    \item Foundational approach that recommends items based on user preferences or item similarities.
+  \end{itemize}
+\item \textbf{2006: Matrix Factorization}
+  \begin{itemize}
+    \item Decomposes user-item interaction matrices to discover latent features, notably popularized by the Netflix Prize.
+  \end{itemize}
+\item \textbf{2016: Wide \& Deep (Google)}
+  \begin{itemize}
+    \item Combines the memorization power of wide linear models with the generalization capability of deep neural networks.
+  \end{itemize}
+\item \textbf{2017: NCF (Neural Collaborative Filtering)}
+  \begin{itemize}
+    \item Replaces matrix factorization with a neural network to model complex user-item interactions.
+  \end{itemize}
+\item \textbf{2017: DeepFM}
+  \begin{itemize}
+    \item Integrates Factorization Machines with deep neural networks to explicitly model feature interactions at various orders.
+  \end{itemize}
+\item \textbf{2017: xDeepFM}
+  \begin{itemize}
+    \item Explicitly models feature interactions at different orders within a compressed interaction network for enhanced performance.
+  \end{itemize}
+\item \textbf{2018+: SASRec (Self-Attentive Sequential Recommendation)}
+  \begin{itemize}
+    \item Leverages the Transformer architecture to effectively model sequential user behavior for next-item prediction.
+  \end{itemize}
+\item \textbf{2019+: LightGCN (Graph Convolutional Networks)}
+  \begin{itemize}
+    \item Simplifies GCNs for recommendations by focusing on linear propagation and neighborhood aggregation in the graph.
+  \end{itemize}
+\end{itemize}
+\textbf{Current State-of-the-Art (SOTA):} Modern SOTA recommender systems often combine deep learning (e.g., Transformer-based sequential models, Graph Neural Networks like LightGCN) with hybrid approaches that leverage both content and collaborative signals, increasingly integrating large language models for rich item and user understanding.
+
+\section{Robotics}
+
+\textbf{Deep Reinforcement Learning Models:}
+\begin{itemize}[leftmargin=1.5em]
+\item \textbf{2015: DQN (Deep Q-Network, DeepMind/Google)}
+  \begin{itemize}
+    \item First deep RL model to achieve human-level control in Atari games by learning Q-values directly from pixel inputs.
+  \end{itemize}
+\item \textbf{2015: DDPG (Deep Deterministic Policy Gradient)}
+  \begin{itemize}
+    \item An off-policy actor-critic, model-free algorithm designed for continuous action spaces.
+  \end{itemize}
+\item \textbf{2016: A3C (Asynchronous Advantage Actor-Critic, DeepMind/Google)}
+  \begin{itemize}
+    \item A parallel asynchronous RL algorithm enabling efficient training across multiple CPU threads.
+  \end{itemize}
+\item \textbf{2016/2017: AlphaGo/Zero (DeepMind/Google)}
+  \begin{itemize}
+    \item Mastered the game of Go using deep neural networks combined with Monte Carlo Tree Search, later learning entirely from self-play.
+  \end{itemize}
+\item \textbf{2017: PPO (Proximal Policy Optimization, OpenAI)}
+  \begin{itemize}
+    \item A stable and efficient policy gradient method, widely used for its balance of performance and ease of implementation.
+  \end{itemize}
+\item \textbf{2018: SAC (Soft Actor-Critic)}
+  \begin{itemize}
+    \item An off-policy actor-critic algorithm aiming for maximum entropy reinforcement learning, known for sample efficiency and robustness.
+  \end{itemize}
+\item \textbf{2022: Decision Transformer (OpenAI)}
+  \begin{itemize}
+    \item Formulates RL as a sequence modeling problem using transformers, enabling few-shot generalization across tasks.
+  \end{itemize}
+\item \textbf{2023: RT-1 (Robotics Transformer 1, Google)}
+  \begin{itemize}
+    \item A large-scale vision-language-action model trained on 130k robot episodes to perform over 700 tasks using a single robot policy.
+  \end{itemize}
+\item \textbf{2024: RT-2 (Robotics Transformer 2, Google DeepMind)}
+  \begin{itemize}
+    \item Multimodal transformer trained on both web and robot data; capable of zero-shot generalization to novel tasks using visual-language grounding.
+  \end{itemize}
+\end{itemize}
+
+\textbf{Sim-to-Real:} Techniques for transferring policies learned in simulation to physical robots, often using domain randomization, adversarial dynamics, and sim2real fine-tuning to enhance robustness and generalization in real-world deployment.
+
+
+
+\textbf{Current State-of-the-Art (SOTA):} Robotics is increasingly driven by foundation models (e.g., RT-2, PaLM-E, RT-X) that leverage large-scale multimodal data and integrate reinforcement learning with natural language and vision, enabling generalizable, sample-efficient, and flexible control across diverse real-world tasks.
+
+\begin{thebibliography}{10}
+  \bibitem{article}
+  Li, Jun and Zhang, Chenyang and Zhu, Wei and Ren, Yawei.
+  A Comprehensive Survey of Image Generation Models Based on Deep Learning.
+  \textit{Annals of Data Science}, vol. 12, pp. 141--170, June 2024.
+  doi: \href{https://doi.org/10.1007/s40745-024-00544-1}{10.1007/s40745-024-00544-1}
+  \bibitem{GUO2024108709}
+Ruifeng Guo, Jingxuan Wei, Linzhuang Sun, Bihui Yu, Guiyong Chang, Dawei Liu, Sibo Zhang, Zhengbing Yao, Mingjun Xu, and Liping Bu.
+A survey on advancements in image--text multimodal models: From general techniques to biomedical implementations.
+\textit{Computers in Biology and Medicine}, 178:108709, 2024.
+doi: \href{https://doi.org/10.1016/j.compbiomed.2024.108709}{10.1016/j.compbiomed.2024.108709}.
+\bibitem{electronics13142734}
+M. Gao, G. Zou, Y. Li, and X. Guo, ``Recent Advances in Computer Vision: Technologies and Applications,'' \emph{Electronics}, vol. 13, no. 14, article 2734, 2024. Available: \url{https://www.mdpi.com/2079-9292/13/14/2734}. doi:10.3390/electronics13142734
+\bibitem{https://doi.org/10.1002/widm.70004}
+Koç, Canan and Özyurt, Fatih and Iantovics, Laszlo Barna.
+"Survey on Latest Advances in Natural Language Processing Applications of Generative Adversarial Networks."
+\textit{WIREs Data Mining and Knowledge Discovery}, vol. 15, no. 1, 2025, e70004.
+\href{https://doi.org/10.1002/widm.70004}{https://doi.org/10.1002/widm.70004}
+\bibitem{10.1145/3649449}
+Junyi Li, Tianyi Tang, Wayne Xin Zhao, Jian-Yun Nie, and Ji-Rong Wen.
+\newblock Pre-Trained Language Models for Text Generation: A Survey.
+\newblock {\em ACM Comput. Surv.}, 56(9):230, 2024.
+\newblock Association for Computing Machinery, New York, NY, USA.
+\newblock \url{https://doi.org/10.1145/3649449}
+\bibitem{10544015}
+Sudhan, S., Nair, P. P., \& Thushara, M. (2024). Text-to-Speech and Speech-to-Text Models: A Systematic Examination of Diverse Approaches. In \textit{2024 IEEE 9th International Conference for Convergence in Technology (I2CT)} (pp. 1-8). \href{https://doi.org/10.1109/I2CT61223.2024.10544015}{doi:10.1109/I2CT61223.2024.10544015}
+\bibitem{10494051}
+Y.~Li, K.~Liu, R.~Satapathy, S.~Wang, and E.~Cambria,
+``Recent Developments in Recommender Systems: A Survey [Review Article],'' 
+\emph{IEEE Computational Intelligence Magazine}, vol.~19, no.~2, pp.~78--95, 2024. doi:10.1109/MCI.2024.3363984.
+\bibitem{gaurav-2024}
+Akshat Gaurav and Varsha Arya.
+\newblock \emph{AI Technologies in Robotics}.
+\newblock In \emph{Advances in computational intelligence and robotics book series}, pages 17--32, December 2024.
+\newblock \href{https://www.igi-global.com/chapter/ai-technologies-in-robotics/365356}{https://www.igi-global.com/chapter/ai-technologies-in-robotics/365356}.
+\newblock doi:10.4018/979-8-3693-2707-4.ch002.
+
+\end{thebibliography}
+
+\end{document}

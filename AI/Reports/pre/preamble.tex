@@ -1,0 +1,96 @@
+\usepackage{amsmath}
+\usepackage[justification=centering]{caption} % All captions will be centered. 
+\usepackage[a4paper, left=1in, right=1in, top=1in, bottom=1in]{geometry}
+\usepackage{parskip}
+\usepackage[]{graphicx}
+\usepackage{microtype} % for micro-typography
+\usepackage{setspace} % for line spacing
+\usepackage{array} % for table
+\usepackage{booktabs} %better h line in table
+\usepackage{tabularx} % flexible column width
+\usepackage{tikz}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+% \usepackage{times}
+\usepackage{listings}
+\usepackage{float}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{multicol} % multiple columns in a document
+
+\usepackage{graphicx} % For including images
+\usepackage{amsmath} % For better math support
+\usepackage{sectsty}
+\usepackage{setspace}
+\usepackage{lmodern} % Use Latin Modern fonts
+% USE linespacing as 1.5 from package setspace
+% \onehalfspacing
+% \usepackage{mathptm}  % Use Times New Roman font
+\usepackage{mathptmx}
+
+
+% Customize section fonts and spacing
+\sectionfont{\MakeUppercase} % Make section titles uppercase
+% \subsectionfont{\MakeUppercase} % Make subsection titles uppercase
+% \subsubsectionfont{\MakeUppercase} % Make subsubsection titles uppercase
+
+%  a new command for displyaing title on title page : all caps, bold large font
+\newcommand{\titleOnReportBegin}[1]{\textbf{\Large\MakeUppercase{\cTitle}}}
+\newcommand{\titleCaseForReport}[1]{\textbf{\Large\MakeUppercase{#1}}}
+
+
+
+% Define custom colors
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{codeblue}{rgb}{0,0,0.82}
+\definecolor{codeorange}{rgb}{0.82,0.41,0.12}
+\definecolor{backcolour}{rgb}{0.97,0.97,0.97}
+
+\lstdefinestyle{cppstyle}{
+    language=Python,
+    commentstyle=\color{codegreen},    % Lush green comments
+    keywordstyle=\color{codeblue},     % Bold and vibrant blue keywords
+    numberstyle=\tiny\color{codegray}, % Diminutive gray line numbers
+    stringstyle=\color{codeorange},    % Warm and lively orange strings
+    basicstyle=\ttfamily\footnotesize, % Monospace font, footnotesize
+    breaklines=true,                   % Allow line breaks
+    backgroundcolor=\color{backcolour},% Background color
+    captionpos=b,                      % Caption at the bottom
+    keepspaces=true,                   % Preserve spaces in code
+    numbers=left,                      % Line numbers on the left
+    numbersep=5pt,                     % Space between number and code
+    showspaces=false,                  % Don't show spaces
+    showstringspaces=false,            % Don't show spaces in strings
+    showtabs=false,                    % Don't show tabs
+    tabsize=2                          % Tab size of 2 spaces
+}
+
+
+\lstset{
+    language=Matlab,
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\color{blue},
+    commentstyle=\color{green},
+    stringstyle=\color{red},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    numbersep=10pt,
+    backgroundcolor=\color{lightgray!20},
+    frame=single,
+    rulecolor=\color{black},
+    tabsize=4,
+    captionpos=b,
+    breaklines=true,
+    breakatwhitespace=false,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false
+}
