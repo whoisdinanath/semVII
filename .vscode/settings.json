@@ -56,8 +56,6 @@
     "security.workspace.trust.untrustedFiles": "ask", // Prompt before opening untrusted files
     "workbench.sideBar.location": "right",            // Move the sidebar to the right
     "editor.mouseWheelZoom": true,                    // Enable mouse wheel zoom in the editor
-    "editor.fontFamily": "Cascadia Code", // Use JetBrains Mono font
-    "editor.fontLigatures": "'ss01'",                 // Enable font ligatures for a cleaner code
     "markdown.preview.typographer": true,             // Enable typographer for Markdown preview
     "debug.onTaskErrors": "debugAnyway",              // Debug even when there are task errors
     "editor.wordWrap": "on",                          // Enable word wrapping in the editor
