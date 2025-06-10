@@ -98,11 +98,11 @@ Each grayscale image of size \(28 \times 28\) is flattened into a 784-dimensiona
         \toprule
         \textbf{Label} & \textbf{Class Name} & \textbf{Label} & \textbf{Class Name} \\
         \midrule
-        0 & T-shirt/top & 1 & Trouser \\
-        2 & Pullover    & 3 & Dress   \\
-        4 & Coat        & 5 & Sandal  \\
-        6 & Shirt       & 7 & Sneaker \\
-        8 & Bag         & 9 & Ankle boot \\
+        0              & T-shirt/top         & 1              & Trouser             \\
+        2              & Pullover            & 3              & Dress               \\
+        4              & Coat                & 5              & Sandal              \\
+        6              & Shirt               & 7              & Sneaker             \\
+        8              & Bag                 & 9              & Ankle boot          \\
         \bottomrule
     \end{tabular}
 \end{table}
@@ -125,38 +125,119 @@ Model training includes forward pass, loss calculation, backpropagation, and wei
 \subsection{Dataset}
 FashionMNIST is a labeled dataset of 60,000 training and 10,000 test grayscale images across 10 classes of fashion items. It is publicly available via torchvision.
 
+% \section{Experiment \& Model Implementation}
+% \subsection{Data Preprocessing}
+% The image pixel values were normalized from their original range of $[0, 255]$ to $[-1, 1]$. The training and validation split was 90\% for training, 10\% for validation.
+
+% \subsection{Model Architecture}
+% The MLP consisted of:
+% \begin{itemize}
+%     \item Flatten layer (784 input)
+%     \item Dense layer (128 units, ReLU)
+%     \item Dense layer (64 units, ReLU)
+%     \item Output layer (10 units, logits)
+% \end{itemize}
+
+% \subsection{Training Configuration}
+% \begin{itemize}
+%     \item Batch Size: 64 (training), 256 (validation/test)
+%     \item Epochs: 10
+%     \item Learning Rate: 0.001
+%     \item Optimizer: Adam
+%     \item Loss: CrossEntropy
+% \end{itemize}
+
+% \subsection{Evaluation Metrics}
+% \begin{itemize}
+%     \item Accuracy
+%     \item Precision (macro)
+%     \item Recall (macro)
+%     \item F1-Score (macro)
+%     \item ROC-AUC per class
+% \end{itemize}
+
+% \subsection{Code Snippet}
+% \begin{lstlisting}[caption={Model Definition}]
+% class MLP(nn.Module):
+%     def __init__(self):
+%         super(MLP, self).__init__()
+%         self.model = nn.Sequential(
+%             nn.Flatten(),
+%             nn.Linear(784, 128),
+%             nn.ReLU(),
+%             nn.Linear(128, 64),
+%             nn.ReLU(),
+%             nn.Linear(64, 10)
+%         )
+%     def forward(self, x):
+%         return self.model(x)
+% \end{lstlisting}
 \section{Experiment \& Model Implementation}
+
 \subsection{Data Preprocessing}
-The image pixel values were normalized from their original range of $[0, 255]$ to $[-1, 1]$. The training and validation split was 90\% for training, 10\% for validation.
+Data preprocessing is a critical step in any machine learning pipeline, especially for image data. In this study, each $28 \times 28$ pixel grayscale image from the FashionMNIST dataset is first loaded as a two-dimensional array. To ensure consistent input distribution, the pixel values are normalized from their original range $[0, 255]$ to $[-1, 1]$ using the transformation $x' = (x / 127.5) - 1$. This normalization helps the network converge faster during training and prevents issues related to disparate value scales.
+
+After normalization, the dataset is split into training, validation, and test subsets. 90\% of the original training data is used for training, and 10\% is reserved for validation to monitor overfitting and tune hyperparameters. The test set remains unseen throughout the training process and is used solely for final performance reporting.
 
 \subsection{Model Architecture}
-The MLP consisted of:
+The architecture designed for this experiment is a fully connected Multilayer Perceptron (MLP) with two hidden layers. The choice of architecture is influenced by the relatively low spatial resolution of FashionMNIST images, which allows a dense network to capture meaningful patterns without the spatial inductive biases of convolutional layers.
+
+The architecture is as follows:
 \begin{itemize}
-    \item Flatten layer (784 input)
-    \item Dense layer (128 units, ReLU)
-    \item Dense layer (64 units, ReLU)
-    \item Output layer (10 units, logits)
+    \item \textbf{Input Layer:} Flattens the $28 \times 28$ image into a 784-dimensional feature vector.
+    \item \textbf{First Hidden Layer:} Fully connected (Linear) layer with 128 neurons, followed by a ReLU activation function. This layer projects the input into a higher-dimensional space, allowing the network to learn complex feature representations.
+    \item \textbf{Second Hidden Layer:} Another fully connected layer with 64 neurons and ReLU activation. This intermediate compression helps in extracting higher-level features while preventing overfitting due to excessive network width.
+    \item \textbf{Output Layer:} A dense layer with 10 output neurons, corresponding to the 10 clothing categories. The output logits are used in combination with the cross-entropy loss during training.
 \end{itemize}
 
-\subsection{Training Configuration}
+\subsection{Training Pipeline and Hyperparameters}
+The network is implemented and trained in PyTorch. Key hyperparameters and configurations are:
 \begin{itemize}
-    \item Batch Size: 64 (training), 256 (validation/test)
-    \item Epochs: 10
-    \item Learning Rate: 0.001
-    \item Optimizer: Adam
-    \item Loss: CrossEntropy
+    \item \textbf{Batch Size:} 64 for training, 256 for validation and test. Smaller batch sizes during training enable more frequent updates and potentially better generalization.
+    \item \textbf{Epochs:} 10 full passes over the training, and 10 epochs were sufficient to ensure convergence without overfitting.
+    \item \textbf{Learning Rate:} 0.001, chosen as a standard starting point for Adam optimizer and further validated via loss curve smoothness.
+    \item \textbf{Optimizer:} Adam, a variant of stochastic gradient descent that adaptively scales learning rates per parameter, resulting in robust and efficient convergence.
+    \item \textbf{Loss Function:} Cross-entropy loss, suitable for multi-class classification with mutually exclusive categories.
 \end{itemize}
+
+During each training epoch, the model undergoes a forward pass to compute predictions, calculates the loss, performs backpropagation to compute gradients, and updates weights. Validation loss and metrics are computed after each epoch to track generalization performance and detect overfitting.
+
 
 \subsection{Evaluation Metrics}
+Evaluating classification models requires a comprehensive suite of metrics, especially for multi-class datasets such as FashionMNIST. The following metrics were employed:
+
 \begin{itemize}
-    \item Accuracy
-    \item Precision (macro)
-    \item Recall (macro)
-    \item F1-Score (macro)
-    \item ROC-AUC per class
+    \item \textbf{Accuracy:} The fraction of correct predictions among all predictions, defined as
+          \[
+              \text{Accuracy} = \frac{\text{Number of Correct Predictions}}{\text{Total Predictions}}
+          \]
+          While intuitive, accuracy alone may not suffice in imbalanced datasets.
+
+    \item \textbf{Precision ~:} Measures the proportion of positive identifications that were actually correct. For multi-class tasks, it is the arithmetic mean of precision values for all classes:
+          \[
+              \text{Precision}_\text{} = \frac{1}{K} \sum_{i=1}^{K} \frac{\text{TP}_i}{\text{TP}_i + \text{FP}_i}
+          \]
+          where $K$ is the number of classes, $\text{TP}_i$ is true positives for class $i$, and $\text{FP}_i$ is false positives for class $i$.
+
+    \item \textbf{Recall ~:} Measures the proportion of actual positives that were identified correctly:
+          \[
+              \text{Recall}_\text{} = \frac{1}{K} \sum_{i=1}^{K} \frac{\text{TP}_i}{\text{TP}_i + \text{FN}_i}
+          \]
+          where $\text{FN}_i$ is false negatives for class $i$.
+
+    \item \textbf{F1-score ~:} The harmonic mean of precision and recall, providing a balanced assessment in case of class imbalance:
+          \[
+              \text{F1}_\text{} = \frac{1}{K} \sum_{i=1}^{K} 2 \cdot \frac{\text{Precision}_i \cdot \text{Recall}_i}{\text{Precision}_i + \text{Recall}_i}
+          \]
+
+    \item \textbf{ROC-AUC (Receiver Operating Characteristic – Area Under Curve):} For each class, a one-vs-rest strategy is used to compute the ROC curve, which plots the true positive rate against the false positive rate at various threshold settings. The AUC summarizes the classifier's ability to distinguish between classes; a higher value indicates better performance.
 \end{itemize}
 
+This comprehensive metric set ensures robust evaluation by considering not just overall correctness, but also the quality of predictions per class, and the trade-off between precision and recall. The ROC-AUC further visualizes separability and potential performance under different operating thresholds.
+
 \subsection{Code Snippet}
+Below is the core implementation of the MLP in PyTorch:
+
 \begin{lstlisting}[caption={Model Definition}]
 class MLP(nn.Module):
     def __init__(self):
@@ -172,6 +253,12 @@ class MLP(nn.Module):
     def forward(self, x):
         return self.model(x)
 \end{lstlisting}
+
+\subsection{Training Procedure and Monitoring}
+Training and validation losses are tracked at each epoch. The model's performance is periodically assessed on the validation set. If the validation loss ceases to improve, this may indicate overfitting, and training is terminated early
+
+Visualizations such as loss curves (training vs validation) and ROC curves for each class provide insights into convergence behavior and class separability, respectively.
+
 
 \section{Result}
 The model achieved the following performance on the test dataset:
@@ -192,7 +279,7 @@ The model achieved the following performance on the test dataset:
 \end{table}
 
 \subsection{ROC Curves}
-The ROC-AUC was computed for each class using a one-vs-rest approach. The plotted curves indicate high separability between classes.
+The ROC-AUC was computed for each class using a one-vs-rest approach. The plotted curves indicate high separability between classes. The lowest separability was observed for the class 6 (shirt), with an AUC of 0.96, while the highest was for class 1 (Trouser), with an AUC of 1.
 
 \begin{figure}[h]
     \centering
