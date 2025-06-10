@@ -52,11 +52,10 @@
 \maketitle
 
 \begin{abstract}
-
-
+  This lab report presents the practical steps and results of applying basic image processing techniques to digital photographs. We worked with real images to learn how to read, display, and analyze them using Python libraries. The experiment included separating color channels, plotting histograms, and using filters like Sobel and Laplacian to detect edges. We also added different types of noise to images and then removed them using Gaussian and median filters. The results show how these methods can improve image quality and help in tasks like highlighting important features or cleaning up noisy pictures. These techniques are useful for many applications, including medical imaging, remote sensing, and computer vision.
 \end{abstract}
 \begin{IEEEkeywords}
-
+  Digital Image Processing, Image Enhancement, Edge Detection, Noise Modeling, Python, OpenCV
 \end{IEEEkeywords}
 
 \section{Introduction}
@@ -352,8 +351,6 @@ Thresholding is the simplest method of image segmentation. From a grayscale imag
 \end{equation}
 
 where $T$ is the threshold value, $f(x,y)$ is the input image, and $g(x,y)$ is the resulting binary image.
-
-While we did not explicitly implement traditional thresholding in our code for this lab, we can include it as an example of a basic segmentation technique:
 
 \begin{lstlisting}[caption=Simple thresholding example]
 def simple_threshold(image, threshold):
