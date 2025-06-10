@@ -1,0 +1,8 @@
+Title
+Abstract
+Introduction: Functions, dataset, perceptron LA
+Experiment/Model
+Results
+Discussion
+Why xor not working, why logistic function...
+Conclusion

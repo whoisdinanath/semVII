@@ -52,7 +52,7 @@
 \maketitle
 
 \begin{abstract}
-    This experiment aims to implement and evaluate a Multi-Layer Perceptron (MLP) neural network model using PyTorch for binary classification on a synthetically generated dataset. The dataset was created using \texttt{sklearn}'s \texttt{make\_classification}, comprising 5000 samples and 10 features, of which 3 are informative. A custom PyTorch \texttt{Dataset} class was utilized to efficiently handle data loading. The MLP model consists of three fully connected layers with LeakyReLU and Sigmoid activations, and it was trained using Stochastic Gradient Descent (SGD) and CrossEntropyLoss as the loss function. Evaluation was performed using accuracy metrics and loss curves. The model achieved an accuracy of approximately 89\%, indicating that even simple neural network architectures can provide effective performance when trained properly. The study highlights the importance of activation functions, optimizers, and training strategies in achieving convergence and generalization. Results are visualized through training and validation loss plots, reinforcing the model's learning behavior across epochs.
+    This experiment aims to implement and evaluate a Multi-Layer Perceptron (MLP) neural network model using PyTorch for binary classification on a synthetically generated dataset. The dataset was created using \texttt{sklearn}'s \texttt{make\_classification}, comprising 5000 samples and 10 features, of which 3 are informative. A custom PyTorch \texttt{Dataset} class was utilized to efficiently handle data loading. The MLP model consists of three fully connected layers with LeakyReLU and Sigmoid activations, and it was trained using Stochastic Gradient Descent (SGD) and CrossEntropyLoss as the loss function. Evaluation was performed using accuracy metrics and loss curves. The model achieved an accuracy of approximately 89\% using Adam optimizer, indicating that even simple neural network architectures can provide effective performance when trained properly. The study highlights the importance of activation functions, optimizers, and training strategies in achieving convergence and generalization. Results are visualized through training and validation loss plots, reinforcing the model's learning behavior across epochs.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -317,6 +317,27 @@ Softmax converts logits into probabilities that sum to 1. Its derivative is more
 
 Activation functions are chosen based on the problem type and network architecture. Their derivatives are essential for gradient-based optimization, as they determine how errors are propagated backward through the network during training.
 
+\begin{table*}[ht]
+    \centering
+    \caption{Summary of Common Activation Functions, Derivatives, and Characteristics}
+    \begin{tabular}{@{}p{2.5cm}p{3.8cm}p{3.8cm}p{3.2cm}p{1.6cm}@{}}
+        \toprule
+        \textbf{Function} & \textbf{Formula} & \textbf{Derivative} & \textbf{Description} & \textbf{Figure Ref.} \\
+        \midrule
+        Sigmoid & $\sigma(x) = \frac{1}{1 + e^{-x}}$ & $\sigma'(x) = \sigma(x)(1-\sigma(x))$ & Maps input to $(0,1)$, smooth S-curve; used for binary classification; can saturate and cause vanishing gradients. & Fig.~\ref{fig:sigmoid},~\ref{fig:sigmoid_derivative} \\
+        \midrule
+        Tanh & $\tanh(x) = \frac{e^{x} - e^{-x}}{e^{x} + e^{-x}}$ & $\tanh'(x) = 1 - \tanh^2(x)$ & Maps input to $(-1,1)$, zero-centered; often leads to faster convergence than sigmoid; can still saturate. & Fig.~\ref{fig:tanh},~\ref{fig:tanh_derivative} \\
+        \midrule
+        ReLU & $f(x) = \max(0, x)$ & $f'(x) = \begin{cases} 1 & x > 0 \\ 0 & x \leq 0 \end{cases}$ & Outputs zero for $x < 0$ and linear for $x > 0$; fast and popular; risk of “dead” neurons. & Fig.~\ref{fig:relu},~\ref{fig:relu_derivative} \\
+        \midrule
+        Leaky ReLU & $f(x) = \max(\alpha x, x)$ & $f'(x) = \begin{cases} 1 & x > 0 \\ \alpha & x \leq 0 \end{cases}$ & Allows a small gradient when $x < 0$; helps mitigate dead neuron issue in ReLU; $\alpha$ is small (e.g., 0.01). & Fig.~\ref{fig:leaky_relu},~\ref{fig:leaky_relu_derivative} \\
+        \midrule
+        Softmax & $\mathrm{softmax}(x_i) = \frac{e^{x_i}}{\sum_j e^{x_j}}$ & $\frac{\partial \mathrm{softmax}_i}{\partial x_j} = \mathrm{softmax}_i (\delta_{ij} - \mathrm{softmax}_j)$ & Converts vector of logits into probabilities; used in output layer for multi-class classification. & -- \\
+        \bottomrule
+    \end{tabular}
+\end{table*}
+
+
 \subsection{Pseudo-Random Number Generators (PRNGs)}
 Pseudo-random number generators (PRNGs) are deterministic algorithms that produce sequences of numbers with properties approximating true randomness. While not truly random (as they're based on mathematical formulas), high-quality PRNGs produce sequences that pass statistical tests for randomness. In neural network development and machine learning broadly, PRNGs serve several critical functions:
 
@@ -380,7 +401,68 @@ Often used with softmax for multi-class classification. It quantifies the likeli
 
 The choice of loss function depends on the task (regression, binary classification, multi-class classification) and directly affects the learning dynamics. The derivatives of loss functions are used in backpropagation to compute gradients for parameter updates.
 
-% Figure suggestion: Plot of MSE and cross-entropy loss curves and their derivatives.
+\subsection{Mean Absolute Error (MAE)}
+\begin{equation}
+    L = \frac{1}{n}\sum_{i=1}^n |y_i - \hat{y}_i|
+\end{equation}
+MAE measures the average absolute difference between predicted and true values. It is robust to outliers compared to MSE. Its derivative with respect to \(\hat{y}\) is:
+\begin{equation}
+    \frac{\partial L}{\partial \hat{y}} = 
+    \begin{cases} 
+        -1 & \text{if } \hat{y} < y \\ 
+        1 & \text{if } \hat{y} > y \\ 
+        0 & \text{otherwise} 
+    \end{cases}
+\end{equation}
+
+\subsection{Binary Cross-Entropy (Log Loss)}
+\begin{equation}
+    L = -[y \log(\hat{y}) + (1-y)\log(1-\hat{y})]
+\end{equation}
+Binary cross-entropy is used for binary classification tasks. It penalizes confident but incorrect predictions. Its derivative with respect to \(\hat{y}\) is:
+\begin{equation}
+    \frac{\partial L}{\partial \hat{y}} = -\frac{y}{\hat{y}} + \frac{1-y}{1-\hat{y}}
+\end{equation}
+
+
+
+\begin{table*}[ht]
+    \centering
+    \caption{Summary of Common Loss Functions, Their Derivatives, and Descriptions}
+    \begin{tabular}{@{}p{3cm}p{4cm}p{4.5cm}p{5cm}@{}}
+        \toprule
+        \textbf{Loss Function} & \textbf{Formula} & \textbf{Derivative w.r.t. $\hat{y}$} & \textbf{Description} \\
+        \midrule
+        Mean Squared Error (MSE) 
+        & $L = \frac{1}{n}\sum_{i=1}^n (y_i - \hat{y}_i)^2$ 
+        & $\frac{\partial L}{\partial \hat{y}} = -2(y - \hat{y})$ 
+        & Penalizes larger errors more. Widely used for regression. Sensitive to outliers. \\
+
+        Mean Absolute Error (MAE) 
+        & $L = \frac{1}{n}\sum_{i=1}^n |y_i - \hat{y}_i|$ 
+        & $\frac{\partial L}{\partial \hat{y}} = \begin{cases} -1 & \text{if } \hat{y} < y \\ 1 & \text{if } \hat{y} > y \\ 0 & \text{otherwise} \end{cases}$ 
+        & Measures average absolute difference. Robust to outliers. \\
+
+        Cross-Entropy Loss 
+        & $L = -\sum_{i} y_i \log(\hat{y}_i)$ 
+        & $\frac{\partial L}{\partial z_i} = \hat{y}_i - y_i$ \newline (where $\hat{y} = \text{softmax}(z)$)
+        & Used for classification (multi-class, one-hot). Measures dissimilarity between predicted and true distributions. \\
+
+        Binary Cross-Entropy (Log Loss) 
+        & $L = -[y \log(\hat{y}) + (1-y)\log(1-\hat{y})]$ 
+        & $\frac{\partial L}{\partial \hat{y}} = -\frac{y}{\hat{y}} + \frac{1-y}{1-\hat{y}}$ 
+        & For binary classification. Penalizes confident but wrong predictions. \\
+
+        Negative Log Likelihood (NLL) 
+        & $L = -\log P(y|\mathbf{x})$ 
+        & $\frac{\partial L}{\partial z_i} = \hat{y}_i - y_i$ \newline (same as cross-entropy for softmax outputs) 
+        & Used in probabilistic models, often with softmax. Maximizes likelihood of observed data. \\
+
+        \bottomrule
+    \end{tabular}
+\end{table*}
+
+
 
 \subsection{Optimizers}
 Optimizers are algorithms that adjust the parameters (weights and biases) of a neural network to minimize the loss function. They use the gradients computed during backpropagation to update parameters in the direction that reduces the loss.
