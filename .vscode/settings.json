@@ -1,5 +1,6 @@
 {
     "latex-workshop.synctex.afterBuild.enabled": true,
+
     "latex-workshop.view.pdf.viewer": "tab",
     "explorer.confirmDelete": false,
     "files.autoSave": "afterDelay",
@@ -64,6 +65,7 @@
 
     // Hiding files and folders that are unnecessary or clutter
     "files.exclude": {
+        // "AI/": true, 
         "**/build/*": true, // Hide all files inside the `build/temp` folder (even if created by LaTeX)
         "**/*.aux": true,  // Hide any .aux files across the project
         "**/*.log": true,  // Hide any .log files
