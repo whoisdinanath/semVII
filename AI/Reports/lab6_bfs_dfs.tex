@@ -1,0 +1,279 @@
+\documentclass[a4paper, journal]{IEEEtran}
+\usepackage[margin=0.75in]{geometry}
+\IEEEoverridecommandlockouts
+% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{tikz}
+\usepackage{times}
+\usepackage{newtxmath}
+\renewcommand{\ttdefault}{cmtt}
+% \usepackage{courier}
+% \usepackage[{cmtt}
+
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.2,0.2,0.2}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstset{
+    language=Python,
+    breaklines=true,
+    breakatwhitespace=true,
+    basicstyle=\ttfamily\footnotesize\color{codegray},
+    keywordstyle=\color{codepurple}\bfseries,
+    commentstyle=\color{codegreen}\itshape,
+    stringstyle=\color{red},
+    captionpos=b,
+    frame=shadowbox,
+    rulesepcolor=\color{gray},
+    showstringspaces=false,
+    tabsize=4,
+    numbers=left,
+    numberstyle=\tiny\color{codegray},
+    stepnumber=1,
+    numbersep=5pt,
+    backgroundcolor=\color{backcolour},
+    xleftmargin=15pt, % Add left margin
+    xrightmargin=15pt % Add right margin
+}
+
+
+\hyphenation{op-tical net-works semi-conduc-tor IEEE-Xplore}
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\usepackage{balance}
+\begin{document}
+
+\title{Maze Solving Using BFS and DFS Algorithms}
+\author{
+\IEEEauthorblockN{Dinanath Padhya\IEEEauthorrefmark{1}, Krishna Acharya\IEEEauthorrefmark{2}} \\
+\IEEEauthorblockA{\IEEEauthorrefmark{1}THA078BEI010 \quad \IEEEauthorrefmark{2}THA078BEI020\\
+Department of Electronics, Communication and Information Engineering\\
+Thapathali Campus, IOE, Tribhuvan University, Nepal\\
+}}
+
+\maketitle
+
+
+
+
+\begin{abstract}
+This lab report presents the implementation and comparison of two fundamental search algorithms - Breadth-First Search (BFS) and Depth-First Search (DFS) - for solving maze navigation problems. The algorithms were implemented in Python using NumPy and Matplotlib to visualize the search process and generate animated GIFs showing the step-by-step exploration of the maze. Both algorithms successfully found paths from the start position 'S' to the goal position 'G', with distinct exploration patterns characteristic of their respective search strategies.
+\end{abstract}
+
+\section{Introduction}
+Maze solving is a classic problem in computer science that demonstrates the application of graph traversal algorithms. In this lab, we implemented and compared two fundamental search algorithms: Breadth-First Search (BFS) and Depth-First Search (DFS). The objective was to navigate through a 20×20 maze from a starting position 'S' to a goal position 'G' while avoiding walls (represented by 1s) and traversing through open paths (represented by 0s).
+
+The maze solving problem can be modeled as a graph where each cell represents a node, and adjacent accessible cells are connected by edges. BFS explores nodes level by level, guaranteeing the shortest path, while DFS explores as far as possible along each branch before backtracking.
+
+\section{Methodology}
+\subsection{Required Libraries and Setup}
+First, the necessary libraries were imported for matrix operations, visualization, data structures, and animation creation:
+\begin{lstlisting}
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
+from collections import deque
+import imageio
+import os
+\end{lstlisting}
+
+\subsection{Maze Definition}
+The 20×20 maze was defined as a 2D array with the following encoding: 'S' represents the start position, 'G' represents the goal position, 0 represents open paths, and 1 represents walls.
+
+\begin{lstlisting}
+maze = [
+['S', 0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0],
+[0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0],
+# truncated due to report length concerns
+[1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 'G']]
+\end{lstlisting}
+
+\subsection*{Step 1: Maze Conversion Function}
+The maze was converted to a numeric grid for easier processing:
+\begin{lstlisting}
+def to_numeric_grid(maze):
+    return np.array([
+        [2 if cell == 'S' else 3 if cell == 'G' else int(cell) 
+         for cell in row] for row in maze
+    ])
+\end{lstlisting}
+
+\subsection*{Step 2: Position Finding Function}
+A utility function was implemented to locate start and goal positions:
+\begin{lstlisting}
+def find_pos(grid, value):
+    pos = np.argwhere(grid == value)
+    return tuple(pos[0]) if pos.size > 0 else None
+\end{lstlisting}
+
+\subsection*{Step 3: Neighbor Generation}
+Valid neighboring cells were determined using 4-directional movement:
+\begin{lstlisting}
+def get_neighbors(r, c, rows, cols):
+    for dr, dc in [(-1,0), (1,0), (0,-1), (0,1)]:
+        nr, nc = r+dr, c+dc
+        if 0 <= nr < rows and 0 <= nc < cols:
+            yield nr, nc
+\end{lstlisting}
+
+\subsection*{Step 4.1: Search Function Setup}
+The main search function was initialized to handle both BFS and DFS algorithms. It included grid conversion, start and goal position identification, and setup for visited nodes and parent tracking:
+\begin{lstlisting}
+def search(maze, algo='bfs', gif_path="animation.gif"):
+    grid = to_numeric_grid(maze)
+    start = find_pos(grid, 2)
+    goal = find_pos(grid, 3)
+    visited = np.zeros_like(grid, dtype=bool)
+    parent = dict()
+\end{lstlisting}
+
+\subsection*{Step 4.2: Visualization Setup}
+\begin{lstlisting}
+    cmap = mcolors.ListedColormap(['white', 'black', 'orange', 'red', 'green', 'blue'])
+    norm = mcolors.BoundaryNorm([0, 1, 2, 3, 4, 5, 6], cmap.N)
+    frames, fig, ax = [], plt.subplots()[1]
+\end{lstlisting}
+
+\subsection*{Step 4.3: Frontier Initialization}
+The frontier was initialized differently for BFS and DFS, using a deque for BFS and a list for DFS:
+\begin{lstlisting}
+    # Frontier setup
+    if algo == 'bfs':
+        frontier = deque()
+        frontier.append((start, [start]))
+    else:
+        frontier = [(start, [start])]
+\end{lstlisting}
+
+\subsection*{Step 4.4: Search Execution}
+The main loop processed nodes from the frontier, marked visited nodes, and tracked the path to the goal:
+\begin{lstlisting}
+    while frontier:
+        (r, c), path = frontier.popleft() if algo == 'bfs' else frontier.pop()
+        if visited[r, c]:
+            continue
+        visited[r, c] = True
+        if (r, c) == goal:
+            for pr, pc in path:
+                if grid[pr, pc] == 0:
+                    grid[pr, pc] = 5  # blue path
+            break
+        for nr, nc in get_neighbors(r, c, grid.shape):
+            if not visited[nr, nc] and grid[nr, nc] != 1:
+                frontier.append(((nr, nc), path + [(nr, nc)]))
+
+        # Mark visited path
+        if grid[r, c] == 0:
+            grid[r, c] = 4  # green
+\end{lstlisting}
+
+\subsection*{Step 4.5: Frame Generation}
+Each step of the search was visualized and saved as a frame for animation:
+\begin{lstlisting}
+        # Save frame
+        ax.clear()
+        ax.imshow(grid, cmap=cmap, norm=norm)
+        ax.set_title(f"{algo.upper()} Search")
+        ax.axis('off')
+        fname = f"frame_{len(frames)}.png"
+        plt.savefig(fname)
+        frames.append(fname)
+\end{lstlisting}
+
+\subsection*{Step 4.6: Animation Creation}
+The saved frames were compiled into a GIF to visualize the search process:
+\begin{lstlisting}
+    plt.close()
+
+    # Create GIF
+    with imageio.get_writer(gif_path, mode='I', duration=0.3) as writer:
+        for filename in frames:
+            image = imageio.imread(filename)
+            writer.append_data(image)
+            os.remove(filename)
+
+    print(f"GIF saved as {gif_path}")
+\end{lstlisting}
+
+\subsection{Step 5: Algorithm Execution}
+Both algorithms were executed to generate comparison animations:
+\begin{lstlisting}
+search(maze, algo='dfs', gif_path="dfs_maze.gif")
+search(maze, algo='bfs', gif_path="bfs_maze.gif")
+\end{lstlisting}
+
+\subsection{Color Coding Scheme}
+The visualization used a specific color mapping where white (0) represents open paths, black (1) represents walls, orange (2) represents the start position, red (3) represents the goal position, green (4) represents visited cells, and blue (5) represents the final solution path.
+
+\subsection{Algorithm Differences}
+The key implementation difference between BFS and DFS lies in frontier management. BFS uses \texttt{deque.popleft()} to process nodes in FIFO (First In, First Out) order, ensuring breadth-first exploration. In contrast, DFS uses \texttt{list.pop()} to process nodes in LIFO (Last In, First Out) order, enabling depth-first exploration of the search space.
+
+\section{Results}
+Both algorithms successfully solved the maze, but with different exploration characteristics. The BFS algorithm explored cells in a wave-like pattern radiating from the start position, guaranteeing the shortest path to the goal and visiting cells systematically level by level. As shown in Figure \ref{fig:bfs_result}, the BFS algorithm demonstrates its characteristic breadth-first exploration behavior, with the final optimal path highlighted in blue. The generated animation was saved as "bfs\_maze.gif" to visualize this step-by-step exploration process.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.4\textwidth]{img/bfs_maze.png}
+\caption{BFS algorithm final path result showing the shortest path from start 'S' to goal 'G'}
+\label{fig:bfs_result}
+\end{figure}
+
+In contrast, the DFS algorithm explored deeply along single paths before backtracking, finding a valid path but not necessarily the shortest one. The algorithm showed a characteristic zigzag exploration pattern, as illustrated in Figure \ref{fig:dfs_result}, where the final path (shown in blue) demonstrates the depth-first approach. The generated animation was saved as "dfs\_maze.gif" to capture this distinct exploration strategy.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.4\textwidth]{img/dfs_maze.png}
+\caption{DFS algorithm final path result showing a valid path from start 'S' to goal 'G'}
+\label{fig:dfs_result}
+\end{figure}
+
+The key differences observed between the two algorithms show that BFS explored more cells systematically but guaranteed optimality, while DFS potentially explored fewer cells but the path may be longer. Both algorithms successfully navigated around walls and obstacles, and the visualization clearly showed the distinct search patterns for each approach. The comparison between Figures \ref{fig:bfs_result} and \ref{fig:dfs_result} clearly demonstrates how each algorithm explores the search space differently, with BFS providing the optimal solution and DFS showing its characteristic deep exploration pattern.
+
+\subsection{Performance Analysis}
+Table \ref{tab:performance} summarizes the quantitative performance metrics obtained from the experimental runs of both algorithms.
+
+\begin{table}[htbp]
+\centering
+\caption{Performance Comparison of BFS and DFS Algorithms}
+\label{tab:performance}
+\begin{tabular}{@{}lcc@{}}
+\toprule
+\textbf{Metric} & \textbf{DFS} & \textbf{BFS} \\
+\midrule
+Convergence Time (seconds) & 5.4256 & 6.6820 \\
+Nodes Explored & 159 & 204 \\
+Path Length (steps) & 45 & 45 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Interestingly, both algorithms found paths of identical length (45 steps), suggesting that in this particular maze configuration, DFS happened to discover an optimal solution. However, this is not guaranteed for DFS in general cases. The DFS algorithm demonstrated superior efficiency in terms of convergence time (5.43 seconds vs 6.68 seconds) and explored significantly fewer nodes (159 vs 204), indicating a more direct path discovery in this specific instance.
+
+The identical final paths for both algorithms were:
+
+
+\begin{lstlisting}[language=python]
+(0,0) -> (0,1) -> (1,1) -> (2,1) -> (2,2) -> (2,3) -> (2,4) -> (2,5) -> (2,6) -> (3,6) -> (4,6) -> (4,7) -> (4,8) -> (5,8) -> (6,8) -> (6,9) -> (6,10) -> (6,11) -> (6,12) -> (6,13) -> (7,13) -> (8,13) -> (8,14) -> (8,15) -> (8,16) -> (8,17) -> (9,17) -> (10,17) -> (10,18) -> (10,19) -> (11,19) -> (12,19) -> (13,19) -> (14,19) -> (14,18) -> (14,17) -> (14,16) -> (15,16) -> (16,16) -> (16,17) -> (16,18) -> (16,19) -> (17,19) -> (18,19) -> (19,19)
+\end{lstlisting}
+This result demonstrates that while BFS guarantees optimality, DFS can sometimes achieve comparable results with better computational efficiency, though this optimality is not guaranteed across all maze configurations.
+
+\section{Conclusion}
+This lab successfully demonstrated the implementation and comparison of BFS and DFS algorithms for maze pathfinding. We observed that BFS guarantees the shortest path by exploring nodes level by level, while DFS explores deeply along paths before backtracking. The practical differences between these algorithms were clearly visualized through the generated animations. 
+
+Quantitative analysis revealed interesting performance characteristics: while both algorithms found identical optimal paths of 45 steps in this specific maze, DFS achieved better computational efficiency with 28\% faster convergence time (5.43 vs 6.68 seconds) and explored 22\% fewer nodes (159 vs 204). This demonstrates that although BFS guarantees optimality in general, DFS can sometimes achieve comparable results with superior performance, though this optimality is not guaranteed across all maze configurations.
+
+Both algorithms successfully found valid paths from start to goal in our 20×20 maze, confirming their effectiveness for pathfinding problems. The visualization techniques using matplotlib and imageio proved valuable for understanding algorithm behavior and creating educational animations that clearly illustrated the distinct exploration patterns of each approach.
+
+\bibliographystyle{IEEEtran}
+\bibliography{ref}
+
+\end{document}

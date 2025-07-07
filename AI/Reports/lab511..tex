@@ -1,0 +1,556 @@
+\documentclass[a4paper, journal]{IEEEtran}
+\usepackage[margin=0.75in]{geometry}
+\IEEEoverridecommandlockouts
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{times}
+\usepackage{newtxmath}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstset{
+  language=Python,
+  breaklines=true,
+  breakatwhitespace=true,
+  basicstyle=\ttfamily\footnotesize,
+  keywordstyle=\color{codepurple},
+  commentstyle=\color{codegreen},
+  stringstyle=\color{red},
+  captionpos=b,
+  frame=single,
+  showstringspaces=false,
+  tabsize=4
+}
+
+\usepackage{balance}
+
+\title{Comparative Analysis of Feedforward Neural Networks and LSTM for IMDB Sentiment Classification}
+\author{
+    \IEEEauthorblockN{Dinanath Padhya\IEEEauthorrefmark{1}, Krishna Acharya\IEEEauthorrefmark{2}}\\
+    \IEEEauthorblockA{\IEEEauthorrefmark{1}THA078BEI010 \quad \IEEEauthorrefmark{2}THA078BEI020\\
+    Department of Electronics, Communication and Information Engineering\\
+    Thapathali Campus, IOE, Tribhuvan University, Nepal\\
+    }
+}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This study presents a comprehensive comparative analysis of two distinct neural network architectures for sentiment classification: feedforward neural networks utilizing TF-IDF feature representations and bidirectional Long Short-Term Memory (LSTM) networks employing word embedding sequences. Experiments were conducted on the IMDB movie review dataset, with systematic evaluation of various architectural configurations including different LSTM layer depths. The feedforward approach achieved the highest accuracy of 89.12\% through effective feature engineering, while the 2-layer LSTM model attained 87.24\% with superior sequential understanding capabilities. Architecture optimization revealed that 3-4 layer LSTM configurations provide optimal performance, with the 4-layer variant achieving 88.12\% accuracy. Results demonstrate that proper feature engineering in feedforward networks can outperform sequence modeling approaches for sentiment classification tasks, while LSTM networks offer advantages in handling variable-length sequences and capturing contextual dependencies. This research contributes practical insights for architecture selection based on specific application requirements and computational constraints.
+\end{abstract}
+
+\section{Introduction}
+
+Sentiment analysis represents a fundamental natural language processing task with widespread applications in social media monitoring, customer feedback analysis, and market research. The ability to automatically classify text as expressing positive or negative sentiment has become increasingly important in our data-driven society. This laboratory experiment investigates two distinct neural network approaches to sentiment classification, comparing their effectiveness on the challenging IMDB movie review dataset.
+
+This experiment explores two distinct neural network architectures: a direct feedforward neural network that treats text as a bag-of-words representation, and a bidirectional LSTM network that captures sequential dependencies and contextual information. The comparison between these approaches provides insights into the importance of sequence modeling for sentiment analysis tasks.
+
+LSTM networks address the vanishing gradient problem inherent in traditional RNNs through their sophisticated gating mechanisms, making them particularly effective for processing variable-length sequences such as movie reviews. The IMDB movie review dataset serves as a benchmark for binary sentiment classification, containing 50,000 highly polar movie reviews labeled as positive or negative sentiment.
+
+\subsection{Objectives}
+
+The primary objectives of this laboratory experiment are:
+\begin{itemize}
+    \item To implement and compare two neural network architectures: feedforward neural network and bidirectional LSTM
+    
+    \item To design and train end-to-end sentiment analysis pipelines using PyTorch
+\end{itemize}
+
+\section{Methodology}
+
+\subsection{LSTM Architecture}
+
+Long Short-Term Memory (LSTM) networks are a specialized type of Recurrent Neural Network designed to learn long-term dependencies in sequential data. Unlike traditional RNNs, LSTMs incorporate three crucial gating mechanisms:
+
+\begin{itemize}
+    \item \textbf{Forget Gate}: Determines which information to discard from the cell state
+    \item \textbf{Input Gate}: Decides which new information to store in the cell state
+    \item \textbf{Output Gate}: Controls which parts of the cell state to output
+\end{itemize}
+
+The mathematical formulation of LSTM operations is given by:
+
+\begin{align}
+f_t &= \sigma(W_f \cdot [h_{t-1}, x_t] + b_f) \\
+i_t &= \sigma(W_i \cdot [h_{t-1}, x_t] + b_i) \\
+\tilde{C}_t &= \tanh(W_C \cdot [h_{t-1}, x_t] + b_C) \\
+C_t &= f_t * C_{t-1} + i_t * \tilde{C}_t \\
+o_t &= \sigma(W_o \cdot [h_{t-1}, x_t] + b_o) \\
+h_t &= o_t * \tanh(C_t)
+\end{align}
+
+where $\sigma$ represents the sigmoid function, $W$ are weight matrices, $b$ are bias vectors, and $*$ denotes element-wise multiplication.
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=\columnwidth]{img/lab5/lstm_architecture.pdf}
+\caption{LSTM Cell Architecture showing the three gating mechanisms (forget gate, input gate, and output gate) and their interactions with the cell state and hidden state.}
+\label{fig:lstm_architecture}
+\end{figure}
+
+\subsection{Bidirectional LSTM}
+
+The implemented model utilizes bidirectional LSTM architecture, which processes sequences in both forward and backward directions. This approach captures contextual information from both past and future tokens, providing richer representations for sentiment classification. The final hidden states from both directions are concatenated before passing through the classification layer.
+
+
+\subsection{Training Parameters}
+
+The model was configured with the following hyperparameters optimized for sentiment classification:
+
+\begin{itemize}
+    \item \textbf{Vocabulary Size}: 10,000 most frequent words
+    \item \textbf{Embedding Dimension}: 128
+    \item \textbf{Hidden Dimension}: 64
+    \item \textbf{Number of LSTM Layers}: 2
+    \item \textbf{Dropout Rate}: 0.5
+    \item \textbf{Batch Size}: 64
+    \item \textbf{Learning Rate}: 0.001
+    \item \textbf{Training Epochs}: 10
+    \item \textbf{Maximum Sequence Length}: 500 tokens
+\end{itemize}
+
+The Adam optimizer was employed for gradient-based optimization due to its adaptive learning rate capabilities and robust performance on NLP tasks.
+
+\subsection{Dataset}
+
+The IMDB Movie Review Dataset consists of 50,000 movie reviews collected from the Internet Movie Database. The dataset characteristics include:
+
+\begin{itemize}
+    \item \textbf{Total Samples}: 50,000 reviews
+    \item \textbf{Classes}: Binary (Positive/Negative sentiment)
+    \item \textbf{Class Distribution}: Balanced (25,000 positive, 25,000 negative)
+    \item \textbf{Train/Test Split}: 80\%/20\% stratified split
+\end{itemize}
+
+The dataset provides a challenging benchmark for sentiment analysis due to the varied writing styles, sarcasm, and complex linguistic patterns present in movie reviews.
+
+\subsection{Feedforward Neural Network Architecture}
+
+The feedforward neural network approach treats text as a bag-of-words representation, where the sequential nature of text is ignored in favor of word frequency features. This architecture consists of:
+
+\begin{itemize}
+    \item \textbf{Input Layer}: Fixed-size vector representation based on vocabulary
+    \item \textbf{Hidden Layers}: Multiple fully connected layers with ReLU activation
+    \item \textbf{Output Layer}: Softmax layer for binary classification
+    \item \textbf{Feature Representation}: TF-IDF (Term Frequency-Inverse Document Frequency) weighting
+\end{itemize}
+
+The mathematical formulation for the feedforward network is:
+
+\begin{align}
+h_1 &= ReLU(W_1 \cdot x + b_1) \\
+h_2 &= ReLU(W_2 \cdot h_1 + b_2) \\
+\vdots \\
+y &= Softmax(W_{out} \cdot h_n + b_{out})
+\end{align}
+
+where $x$ represents the TF-IDF feature vector, $W_i$ and $b_i$ are the weight matrices and bias vectors for each layer, and $y$ is the output probability distribution.
+
+\begin{lstlisting}[caption=Feedforward Neural Network Architecture]
+class FeedforwardSentimentAnalyzer(nn.Module):
+    def __init__(self, input_size, hidden_sizes, num_classes, dropout=0.5):
+        super(FeedforwardSentimentAnalyzer, self).__init__()
+        
+        layers = []
+        prev_size = input_size
+        
+        # Build hidden layers
+        for hidden_size in hidden_sizes:
+            layers.extend([
+                nn.Linear(prev_size, hidden_size),
+                nn.ReLU(),
+                nn.Dropout(dropout)
+            ])
+            prev_size = hidden_size
+        
+        # Output layer
+        layers.append(nn.Linear(prev_size, num_classes))
+        
+        self.network = nn.Sequential(*layers)
+    
+    def forward(self, x):
+        return self.network(x)
+\end{lstlisting}
+
+\subsubsection{Feature Engineering for Feedforward Network}
+
+The feedforward approach requires explicit feature engineering:
+
+\begin{itemize}
+    \item \textbf{TF-IDF Vectorization}: Conversion of text to numerical vectors
+    \item \textbf{Vocabulary Pruning}: Removal of rare and common words
+    \item \textbf{Dimensionality}: Fixed input size of 10,000 features
+    \item \textbf{Normalization}: L2 normalization of feature vectors
+\end{itemize}
+
+\section{Experiment \& Model Implementation}
+
+\subsection{Data Preprocessing}
+
+Comprehensive text preprocessing was performed to prepare the raw review text for model training:
+
+\begin{enumerate}
+    \item \textbf{Text Cleaning}: 
+    \begin{itemize}
+        \item Conversion to lowercase for normalization
+        \item Removal of HTML tags using regular expressions
+        \item Elimination of special characters and digits
+        \item Whitespace normalization
+    \end{itemize}
+    
+    \item \textbf{Vocabulary Creation}:
+    \begin{itemize}
+        \item Frequency-based vocabulary construction
+        \item Retention of 10,000 most frequent words
+        \item Addition of special tokens: \texttt{<PAD>}, \texttt{<UNK>}
+        \item Word-to-index mapping for numerical conversion
+    \end{itemize}
+    
+    \item \textbf{Sequence Processing}:
+    \begin{itemize}
+        \item Text tokenization into word sequences
+        \item Sequence truncation to maximum length of 500 tokens
+        \item Padding of shorter sequences with \texttt{<PAD>} tokens
+        \item Conversion to numerical indices using vocabulary mapping
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Model Implementation}
+
+The LSTM sentiment analyzer was implemented using PyTorch with the following architecture:
+
+\begin{lstlisting}[caption=LSTM Model Architecture]
+class LSTMSentimentAnalyzer(nn.Module):
+    def __init__(self, vocab_size, embedding_dim, hidden_dim, 
+                 num_layers, num_classes, dropout=0.5):
+        super(LSTMSentimentAnalyzer, self).__init__()
+        
+        # Embedding layer for word representations
+        self.embedding = nn.Embedding(vocab_size, embedding_dim, 
+                                     padding_idx=0)
+        
+        # Bidirectional LSTM layer
+        self.lstm = nn.LSTM(embedding_dim, hidden_dim, num_layers, 
+                           batch_first=True, dropout=dropout, 
+                           bidirectional=True)
+        
+        # Dropout for regularization
+        self.dropout = nn.Dropout(dropout)
+        
+        # Classification layer
+        self.fc = nn.Linear(hidden_dim * 2, num_classes)
+    
+    def forward(self, x):
+        embedded = self.embedding(x)
+        lstm_out, (hidden, cell) = self.lstm(embedded)
+        
+        # Concatenate final forward and backward hidden states
+        forward_hidden = hidden[-2]
+        backward_hidden = hidden[-1]
+        final_hidden = torch.cat((forward_hidden, backward_hidden), 
+                                dim=1)
+        
+        final_hidden = self.dropout(final_hidden)
+        output = self.fc(final_hidden)
+        return output
+\end{lstlisting}
+
+The model architecture incorporates approximately 1.2 million trainable parameters, making it computationally efficient while maintaining expressive capacity for sentiment classification.
+
+\subsection{Training Procedure}
+
+The training process incorporates best practices for deep learning:
+
+\begin{enumerate}
+    \item \textbf{Loss Function}: CrossEntropyLoss for binary classification
+    \item \textbf{Optimization}: Adam optimizer with learning rate 0.001
+    \item \textbf{Regularization}: Dropout (0.5) and gradient clipping
+    \item \textbf{Batch Processing}: Mini-batch gradient descent with batch size 64
+    \item \textbf{Validation}: Continuous monitoring of training and test metrics
+\end{enumerate}
+
+The training loop implemented the following workflow:
+
+\begin{lstlisting}[caption=Training Loop Implementation]
+for epoch in range(num_epochs):
+    # Training phase
+    model.train()
+    for batch_idx, (data, targets) in enumerate(train_loader):
+        data, targets = data.to(device), targets.to(device)
+        
+        optimizer.zero_grad()
+        outputs = model(data)
+        loss = criterion(outputs, targets)
+        loss.backward()
+        optimizer.step()
+    
+    # Evaluation phase
+    model.eval()
+    with torch.no_grad():
+        for data, targets in test_loader:
+            outputs = model(data)
+            loss = criterion(outputs, targets)
+            # Calculate accuracy metrics
+\end{lstlisting}
+
+\subsection{Model Persistence and Evaluation}
+
+Model saving and loading functionality ensures reproducibility:
+
+\begin{itemize}
+    \item Model state dictionary preservation with hyperparameters
+    \item Preprocessing component serialization using pickle
+    \item Comprehensive evaluation using classification metrics
+    \item Confusion matrix analysis for error pattern identification
+\end{itemize}
+
+
+
+\section{Results}
+
+\subsection{Comprehensive Experimental Results}
+
+The experimental phase consisted of multiple components: baseline model training, architecture optimization, and comparative analysis between feedforward and LSTM approaches. All experiments were conducted on the IMDB dataset with consistent preprocessing and evaluation protocols.
+
+\subsubsection{on LSTM with fewer data}
+
+The initial 2-layer bidirectional LSTM model established the baseline performance:
+
+\begin{itemize}
+    \item \textbf{Final Test Accuracy}: 87.24\%
+    \item \textbf{Training Convergence}: Achieved stable performance around epoch 6-7
+    \item \textbf{Model Parameters}: 1,486,722 trainable parameters
+    \item \textbf{Training Efficiency}: Fast convergence with consistent improvement
+\end{itemize}
+
+\subsubsection{Architecture Optimization Results}
+
+The systematic exploration of different LSTM layer configurations revealed:
+
+% \begin{figure}[!t]
+% \centering
+% \includegraphics[width=\columnwidth]{img/lab5/comparison.png}
+% \caption{Comprehensive comparison of feedforward neural network and LSTM model performance showing accuracy and loss metrics across different architectures.}
+% \label{fig:architecture_comparison}
+% \end{figure}
+
+\begin{figure*}[!t]
+\centering
+\includegraphics[width=\textwidth]{img/lab5/comparision.png}
+\caption{Training and test accuracy comparison between 2-layer and 4-layer LSTM architectures showing convergence patterns and performance differences across epochs.}
+\label{fig:lstm_layer_comparison}
+\end{figure*}
+
+\textbf{Key Findings:}
+\begin{itemize}
+    \item 3-layer configuration achieved highest accuracy (59.47\%) in quick tests
+    \item 4-layer model showed best performance (88.12\%) in detailed training
+    \item Performance degradation observed beyond 4 layers
+    \item Optimal parameter efficiency achieved with 2-3 layers
+\end{itemize}
+
+Both the feedforward neural network and LSTM sentiment classification models were evaluated on the IMDB dataset. Training was conducted over 10 epochs with continuous monitoring of performance metrics for both architectures.
+
+\subsection{Comparative Performance Overview}
+
+The two approaches demonstrated different strengths and performance characteristics:
+
+\begin{table}[ht]
+\centering
+\caption{Comparative Performance Overview}
+\begin{tabular}{@{}lcc@{}}
+\toprule
+\textbf{Model} & \textbf{Test Accuracy} & \textbf{Training Time} \\
+\midrule
+Feedforward NN & 89.12\% & Fast \\
+Bidirectional LSTM & 87.24\% & Moderate \\
+\bottomrule
+\end{tabular}
+\label{tab:comparison}
+\end{table}
+
+\subsection{Feedforward Neural Network Results}
+
+The feedforward network achieved superior accuracy through effective feature engineering. It reached a good test accuracy of 89.12\%, with training convergence achieved around epoch 5-6. The model's simpler architecture, characterized by fewer parameters, enabled faster training due to parallel processing of features.
+
+\subsection{LSTM Network Results}
+
+The LSTM model demonstrated strong sequential learning capabilities:
+
+\begin{itemize}
+    \item \textbf{Test Accuracy}: 87.24\%
+    \item \textbf{Training Convergence}: Achieved around epoch 6-7
+    \item \textbf{Sequential Understanding}: Better capture of word order and context
+    \item \textbf{Interpretability}: Ability to analyze attention patterns
+\end{itemize}
+
+\subsection{Detailed Performance Metrics}
+
+Both models achieved the following detailed performance on the test dataset:
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{@{}lcc@{}}
+\toprule
+\textbf{Metric} & \textbf{Feedforward NN} & \textbf{LSTM} \\
+\midrule
+Accuracy & 89.12\% & 87.24\% \\
+Precision (Weighted) & 0.8915 & 0.8723 \\
+Recall (Weighted) & 0.8912 & 0.8724 \\
+F1-Score (Weighted) & 0.8913 & 0.8723 \\
+\bottomrule
+\end{tabular}
+\caption{Detailed Performance Comparison}
+\label{tab:detailed_performance}
+\end{table}
+
+\subsection{Training Progress Comparison}
+
+Both models exhibited different convergence patterns:
+
+\subsubsection{Feedforward Neural Network Training}
+
+The feedforward neural network demonstrated rapid convergence and stable training characteristics:
+
+\begin{itemize}
+    \item \textbf{Initial Training Loss}: 0.693 (random initialization)
+    \item \textbf{Final Training Loss}: 0.186
+    \item \textbf{Initial Test Loss}: 0.698
+    \item \textbf{Final Test Loss}: 0.278
+    \item \textbf{Training Convergence}: Achieved around epoch 5-6
+\end{itemize}
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=\columnwidth]{img/lab5/feedforward.png}
+\caption{Feedforward neural network training and test loss curves demonstrating rapid convergence and stable optimization with minimal overfitting characteristics.}
+\label{fig:feedforward_training}
+\end{figure}
+
+\subsubsection{LSTM Network Training}
+
+The LSTM model exhibited slightly slower but consistent convergence:
+
+\begin{itemize}
+    \item \textbf{Initial Training Loss}: 0.693 (random initialization)
+    \item \textbf{Final Training Loss}: 0.241
+    \item \textbf{Initial Test Loss}: 0.698
+    \item \textbf{Final Test Loss}: 0.334
+    \item \textbf{Training Convergence}: Achieved around epoch 6-7
+\end{itemize}
+
+\subsection{Training Progress Visualization}
+
+The training progress comparison reveals distinct convergence patterns between architectures:
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=0.48\columnwidth]{img/lab5/feedforward.png}
+\hfill
+\includegraphics[width=0.48\columnwidth]{img/lab5/lstm.png}
+\caption{Training and test loss curves for (left) Feedforward Neural Network and (right) LSTM model showing convergence patterns and overfitting characteristics over training epochs.}
+\label{fig:training_curves_comparison}
+\end{figure}
+
+The training curves show smooth convergence with minimal overfitting for the feedforward network, indicating effective regularization through the TF-IDF feature representation. The LSTM training curves demonstrate the characteristic pattern of sequence models, with gradual learning of temporal dependencies throughout the training process.
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=\columnwidth]{img/lab5/lstm.png}
+\caption{LSTM model training and test loss curves showing convergence behavior, generalization performance, and optimization dynamics over training epochs.}
+\label{fig:lstm_training_curves}
+\end{figure}
+
+
+\subsection{Classification Analysis}
+
+Per-class performance analysis reveals balanced classification capability for both models:
+
+\begin{table}[ht]
+\centering
+\caption{Per-Class Performance Comparison}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{Model} & \textbf{Class} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-Score} \\
+\midrule
+\multirow{2}{*}{Feedforward NN} & Negative & 0.89 & 0.89 & 0.89 \\
+                                & Positive & 0.89 & 0.89 & 0.89 \\
+\midrule
+\multirow{2}{*}{LSTM} & Negative & 0.87 & 0.87 & 0.87 \\
+                      & Positive & 0.87 & 0.87 & 0.87 \\
+\bottomrule
+\end{tabular}
+\label{tab:class_comparison}
+\end{table}
+
+\subsection{Model Architecture Comparison}
+
+\begin{table}[ht]
+\centering
+\caption{Architecture Characteristics Comparison}
+
+\begin{tabular}{@{}lcc@{}}
+\toprule
+\textbf{Characteristic} & \textbf{Feedforward NN} & \textbf{LSTM} \\
+\midrule
+Input Representation & TF-IDF Vectors & Word Sequences \\
+Feature Engineering & Required & Minimal \\
+Sequential Processing & No & Yes \\
+Parameter Count & $\sim$800K & $\sim$1.4M \\
+Training Speed & Fast & Moderate \\
+Memory Usage & Low & Higher \\
+\bottomrule
+\end{tabular}
+\label{tab:architecture_comparison}
+\end{table}
+
+\subsection{Sample Predictions}
+
+The model demonstrated strong predictive capability on diverse review examples:
+
+\begin{itemize}
+    \item \textbf{Positive Example}: "This movie was absolutely fantastic! The acting was superb and the plot was engaging." $\rightarrow$ \textit{Positive (94.3\% confidence)}
+    \item \textbf{Negative Example}: "I hated this film. It was boring and the acting was terrible." $\rightarrow$ \textit{Negative (91.7\% confidence)}
+    \item \textbf{Neutral Example}: "The movie was okay. Not great but not terrible either." $\rightarrow$ \textit{Positive (52.1\% confidence)}
+\end{itemize}
+
+\subsection{Confusion Matrix Analysis}
+
+The confusion matrix comparison reveals classification patterns and error distributions for both models:
+
+\begin{figure}[!t]
+\centering
+\includegraphics[width=\columnwidth]{img/lab5/confusion_comparision.png}
+\caption{Side-by-side comparison of confusion matrices for LSTM models with variation in layer depth}
+\label{fig:confusion_comparison}
+\end{figure}
+
+The confusion matrix revealed balanced performance with minimal class bias:
+\begin{itemize}
+    \item True Negatives: 4,352 (87.0\%)
+    \item False Positives: 648 (13.0\%)
+    \item False Negatives: 627 (12.5\%)
+    \item True Positives: 4,373 (87.5\%)
+\end{itemize}
+
+\section{Conclusion}
+
+In summary, this laboratory experiment demonstrated that a well-engineered feedforward neural network using TF-IDF features can outperform LSTM-based sequence models for IMDB sentiment classification, achieving a good accuracy. While deeper LSTM architectures (up to 4 layers) slightly improved performance, the feedforward approach remained superior in both accuracy and training efficiency under the tested conditions. These results highlight the importance of feature engineering and model selection based on dataset characteristics and computational resources.
+
+
+\bibliographystyle{IEEEtran}
+\bibliography{ref}
+
+\end{document}
