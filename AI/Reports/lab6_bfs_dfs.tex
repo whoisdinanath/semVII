@@ -54,11 +54,11 @@
 
 \title{Maze Solving Using BFS and DFS Algorithms}
 \author{
-\IEEEauthorblockN{Dinanath Padhya\IEEEauthorrefmark{1}, Krishna Acharya\IEEEauthorrefmark{2}} \\
-\IEEEauthorblockA{\IEEEauthorrefmark{1}THA078BEI010 \quad \IEEEauthorrefmark{2}THA078BEI020\\
-Department of Electronics, Communication and Information Engineering\\
-Thapathali Campus, IOE, Tribhuvan University, Nepal\\
-}}
+    \IEEEauthorblockN{Dinanath Padhya\IEEEauthorrefmark{1}, Krishna Acharya\IEEEauthorrefmark{2}} \\
+    \IEEEauthorblockA{\IEEEauthorrefmark{1}THA078BEI010 \quad \IEEEauthorrefmark{2}THA078BEI020\\
+        Department of Electronics, Communication and Information Engineering\\
+        Thapathali Campus, IOE, Tribhuvan University, Nepal\\
+    }}
 
 \maketitle
 
@@ -66,7 +66,7 @@ Thapathali Campus, IOE, Tribhuvan University, Nepal\\
 
 
 \begin{abstract}
-This lab report presents the implementation and comparison of two fundamental search algorithms - Breadth-First Search (BFS) and Depth-First Search (DFS) - for solving maze navigation problems. The algorithms were implemented in Python using NumPy and Matplotlib to visualize the search process and generate animated GIFs showing the step-by-step exploration of the maze. Both algorithms successfully found paths from the start position 'S' to the goal position 'G', with distinct exploration patterns characteristic of their respective search strategies.
+    This lab report presents the implementation and comparison of two fundamental search algorithms - Breadth-First Search (BFS) and Depth-First Search (DFS) - for solving maze navigation problems. The algorithms were implemented in Python using NumPy and Matplotlib to visualize the search process and generate animated GIFs showing the step-by-step exploration of the maze. Both algorithms successfully found paths from the start position 'S' to the goal position 'G', with distinct exploration patterns characteristic of their respective search strategies.
 \end{abstract}
 
 \section{Introduction}
@@ -221,19 +221,19 @@ The key implementation difference between BFS and DFS lies in frontier managemen
 Both algorithms successfully solved the maze, but with different exploration characteristics. The BFS algorithm explored cells in a wave-like pattern radiating from the start position, guaranteeing the shortest path to the goal and visiting cells systematically level by level. As shown in Figure \ref{fig:bfs_result}, the BFS algorithm demonstrates its characteristic breadth-first exploration behavior, with the final optimal path highlighted in blue. The generated animation was saved as "bfs\_maze.gif" to visualize this step-by-step exploration process.
 
 \begin{figure}[htbp]
-\centering
-\includegraphics[width=0.4\textwidth]{img/bfs_maze.png}
-\caption{BFS algorithm final path result showing the shortest path from start 'S' to goal 'G'}
-\label{fig:bfs_result}
+    \centering
+    \includegraphics[width=0.4\textwidth]{img/bfs_maze.png}
+    \caption{BFS algorithm final path result showing the shortest path from start 'S' to goal 'G'}
+    \label{fig:bfs_result}
 \end{figure}
 
 In contrast, the DFS algorithm explored deeply along single paths before backtracking, finding a valid path but not necessarily the shortest one. The algorithm showed a characteristic zigzag exploration pattern, as illustrated in Figure \ref{fig:dfs_result}, where the final path (shown in blue) demonstrates the depth-first approach. The generated animation was saved as "dfs\_maze.gif" to capture this distinct exploration strategy.
 
 \begin{figure}[htbp]
-\centering
-\includegraphics[width=0.4\textwidth]{img/dfs_maze.png}
-\caption{DFS algorithm final path result showing a valid path from start 'S' to goal 'G'}
-\label{fig:dfs_result}
+    \centering
+    \includegraphics[width=0.4\textwidth]{img/dfs_maze.png}
+    \caption{DFS algorithm final path result showing a valid path from start 'S' to goal 'G'}
+    \label{fig:dfs_result}
 \end{figure}
 
 The key differences observed between the two algorithms show that BFS explored more cells systematically but guaranteed optimality, while DFS potentially explored fewer cells but the path may be longer. Both algorithms successfully navigated around walls and obstacles, and the visualization clearly showed the distinct search patterns for each approach. The comparison between Figures \ref{fig:bfs_result} and \ref{fig:dfs_result} clearly demonstrates how each algorithm explores the search space differently, with BFS providing the optimal solution and DFS showing its characteristic deep exploration pattern.
@@ -242,18 +242,18 @@ The key differences observed between the two algorithms show that BFS explored m
 Table \ref{tab:performance} summarizes the quantitative performance metrics obtained from the experimental runs of both algorithms.
 
 \begin{table}[htbp]
-\centering
-\caption{Performance Comparison of BFS and DFS Algorithms}
-\label{tab:performance}
-\begin{tabular}{@{}lcc@{}}
-\toprule
-\textbf{Metric} & \textbf{DFS} & \textbf{BFS} \\
-\midrule
-Convergence Time (seconds) & 5.4256 & 6.6820 \\
-Nodes Explored & 159 & 204 \\
-Path Length (steps) & 45 & 45 \\
-\bottomrule
-\end{tabular}
+    \centering
+    \caption{Performance Comparison of BFS and DFS Algorithms}
+    \label{tab:performance}
+    \begin{tabular}{@{}lcc@{}}
+        \toprule
+        \textbf{Metric}            & \textbf{DFS} & \textbf{BFS} \\
+        \midrule
+        Convergence Time (seconds) & 5.4256       & 6.6820       \\
+        Nodes Explored             & 159          & 204          \\
+        Path Length (steps)        & 45           & 45           \\
+        \bottomrule
+    \end{tabular}
 \end{table}
 
 Interestingly, both algorithms found paths of identical length (45 steps), suggesting that in this particular maze configuration, DFS happened to discover an optimal solution. However, this is not guaranteed for DFS in general cases. The DFS algorithm demonstrated superior efficiency in terms of convergence time (5.43 seconds vs 6.68 seconds) and explored significantly fewer nodes (159 vs 204), indicating a more direct path discovery in this specific instance.
@@ -267,7 +267,7 @@ The identical final paths for both algorithms were:
 This result demonstrates that while BFS guarantees optimality, DFS can sometimes achieve comparable results with better computational efficiency, though this optimality is not guaranteed across all maze configurations.
 
 \section{Conclusion}
-This lab successfully demonstrated the implementation and comparison of BFS and DFS algorithms for maze pathfinding. We observed that BFS guarantees the shortest path by exploring nodes level by level, while DFS explores deeply along paths before backtracking. The practical differences between these algorithms were clearly visualized through the generated animations. 
+This lab successfully demonstrated the implementation and comparison of BFS and DFS algorithms for maze pathfinding. We observed that BFS guarantees the shortest path by exploring nodes level by level, while DFS explores deeply along paths before backtracking. The practical differences between these algorithms were clearly visualized through the generated animations.
 
 Quantitative analysis revealed interesting performance characteristics: while both algorithms found identical optimal paths of 45 steps in this specific maze, DFS achieved better computational efficiency with 28\% faster convergence time (5.43 vs 6.68 seconds) and explored 22\% fewer nodes (159 vs 204). This demonstrates that although BFS guarantees optimality in general, DFS can sometimes achieve comparable results with superior performance, though this optimality is not guaranteed across all maze configurations.
 
